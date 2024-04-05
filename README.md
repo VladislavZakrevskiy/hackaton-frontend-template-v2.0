@@ -1,30 +1,75 @@
-# React + TypeScript + Vite
+# Гайд по шаблону
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Методология
+В проекте используется методология FSD - в последнее время довольно популярная. Проект состоит из папок с разным уровнем ответсвенности: app, pages, widgets, features, entities, shared
+Подробнее далее...
 
-Currently, two official plugins are available:
+### App
+Согласно методолгии, app - папка, в которой находятся структуры, используемые во всем приложении. Ровно это и там и находится
+// src/app
+-providers
+--ErrorBoundary
+--StoreProvider
+--router
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+-styles
+--providers
+--themes
+--globalStyles.ts
 
-## Expanding the ESLint configuration
+-types
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+#### Providers
+Там самые нужные провайдеры, котоыре нужны на начальном этапе разработки приложения: ErrorBoundary - ловим ошибки, StoreProvider - организация RTK, router - организация react-router-dom
 
-- Configure the top-level `parserOptions` property like this:
+#### Styles
+Организация styled-components - темы, глобальные стили, удобная работа с библиотекой для комфортной разработки
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+#### Pages
+Страницы вашего приложения, в шаблоне главная и Not Found 404 - считаю для начала этого достаточно, можно было бы добавить страницу с ошибкой, но она слишком специфична по логике, ее только самому и писать
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+# Widgets 
+Собрал там основные компоненты для страницы - Page, PageLoader, PageError. Page - тот же main, но с опциональной логикой функцией сохранения скролла при редиректе
+
+### Features 
+Продолжение тем, языков и UI слой для сохранения состояния скролла и темы - очень гибкий раздел, его можно использовать повсюду, поэтому в Entities, причем он достаточно тематичен, чтобы не быть в Shared
+
+### Entities
+Там только сущность пользователя и Auth. Есть сразу авторизация, аутентификая, 0Auth2.0 от Гугла, Гитхаба, ВК, Дискорда, Яндекса - выбирайте
+
+### Shared
+структура:
+-api
+
+-config
+--i18n
+
+-consts
+
+-lib
+--components/DynamicModuleLoader
+--hooks
+--store 
+
+-types
+
+-ui
+--AppImage
+--Loader
+--Portal
+--Stack (Flex, HStack, VStack)
+
+#### i18n 
+i18n полностью настроенный, в public можно писать переводы в en и ru json-файлы
+
+#### lib
+DynamicModuleLoader - ленивая загрузка слайсов RTK 
+
+hooks - собрание жизненно необходимых хуков: useAppDispatch, useAppSelector - от RTK, useInitialEffect, useDebounce, useThrottling, useInfiniteScroll, useHover, useDispatchedActions
+
+store - buildSelector и buildSlice являются невероятно полезными надстойками над RTK. благодаря buildSlice можно не использовать useDispatch 90% разработки, всю работу делает хук внутри. я, когда писал это, в таком восторге был, надеюсь, вы тоже
+
+#### UI
+Самые необходимые (кроме Loader) компоненты, которые серьезно помогают в разработке. HSatck и VStack - flex-контейнеры с flex-direction row и column соответственно
+
+
