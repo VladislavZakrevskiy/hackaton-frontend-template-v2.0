@@ -6,18 +6,20 @@
 
 ### App
 Согласно методолгии, app - папка, в которой находятся структуры, используемые во всем приложении. Ровно это и там и находится
-// src/app
--providers
---ErrorBoundary
---StoreProvider
---router
-
--styles
---providers
---themes
---globalStyles.ts
-
--types
+```
+───app
+│ |  │  
+│ |  │  
+│ |  │
+│ |  └───providers
+│ |      │   ErrorBoundary
+│ |      │   StoreProvider
+│ |      │   router
+│ └─────── styles
+└───types    │   providers
+             │   themes
+             │   globalStyles.ts
+```
 
 #### Providers
 Там самые нужные провайдеры, котоыре нужны на начальном этапе разработки приложения: ErrorBoundary - ловим ошибки, StoreProvider - организация RTK, router - организация react-router-dom
@@ -39,25 +41,33 @@
 
 ### Shared
 структура:
--api
-
--config
---i18n
-
--consts
-
--lib
---components/DynamicModuleLoader
---hooks
---store 
-
--types
-
--ui
---AppImage
---Loader
---Portal
---Stack (Flex, HStack, VStack)
+```
+───shared
+│   
+└───api
+│   
+└───config
+│      |
+│      └───i18n
+│             
+└───consts
+│ 
+└───lib
+│    |
+│    └───components/DynamicModuleLoader
+│    └───hooks
+│    └───store
+│ 
+└───types
+|
+└───ui
+     |
+     └───AppImage
+     └───Loader
+     └───Portal
+     └───Stack 
+             
+```
 
 #### i18n 
 i18n полностью настроенный, в public можно писать переводы в en и ru json-файлы
