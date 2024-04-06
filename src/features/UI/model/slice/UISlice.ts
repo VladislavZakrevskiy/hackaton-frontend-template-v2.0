@@ -1,9 +1,7 @@
 import { PayloadAction } from '@reduxjs/toolkit'
 import { UISchema } from '../types/UISchema'
-import { Themes } from '@/app/styles/themes/types/Themes'
-import { lightTheme } from '@/app/styles/themes/light'
-import { darkTheme } from '@/app/styles/themes/dark'
 import { buildSlice } from '@/shared/lib/store/buildSlice'
+import { darkTheme, lightTheme, Themes } from '@/app/styles'
 
 const initialState: UISchema = {
     scroll: {},

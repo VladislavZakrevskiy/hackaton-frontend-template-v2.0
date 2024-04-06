@@ -1,20 +1,13 @@
-import { cn } from '@/shared/lib/classNames'
 import { FC } from 'react'
-import classes from './PageLoader.module.scss'
 import { Loader } from '@/shared/ui/Loader'
+import { SPageLoader } from './PageLoader.style'
 
-interface Props {
-    className?: string
-}
+interface Props {}
 
-export const PageLoader: FC<Props> = ({ className }) => {
+export const PageLoader: FC<Props> = () => {
     return (
-        <div
-            className={cn(classes.PageLoader, {}, [
-                className,
-            ])}
-        >
-            <Loader/>
-        </div>
+        <SPageLoader>
+            <Loader />
+        </SPageLoader>
     )
 }

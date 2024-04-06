@@ -1,21 +1,19 @@
 import { Suspense, useEffect } from 'react'
 import { AppRouter } from './providers/router'
 import { PageLoader } from '@/widgets/PageLoader'
-import { useSelector } from 'react-redux'
-import { getUserInited } from '@/entities/User'
-import { initAuthData } from '@/entities/User'
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
-import GlobalStyles from './styles/globalStyles'
+import { GlobalStyles } from './styles/globalStyles'
+import { useGetMeQuery } from '@/entities/User/api/userApi'
+import { useUserActions } from '@/entities/User'
 
 const App = () => {
-    const dispatch = useAppDispatch()
-    const _inited = useSelector(getUserInited)
+    const { data: user, isLoading } = useGetMeQuery(undefined)
+    const { setAuthData } = useUserActions()
 
     useEffect(() => {
-        dispatch(initAuthData())
-    }, [dispatch])
+        if (user) setAuthData(user)
+    }, [user])
 
-    if (!_inited) {
+    if (!isLoading) {
         return <PageLoader />
     }
 
@@ -26,7 +24,7 @@ const App = () => {
                 {/* <Navbar /> */}
                 <div className="content-page">
                     {/* <Sidebar /> */}
-                    {_inited && <AppRouter />}
+                    <AppRouter />
                 </div>
             </Suspense>
         </div>

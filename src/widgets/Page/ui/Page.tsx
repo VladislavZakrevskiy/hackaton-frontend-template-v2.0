@@ -1,28 +1,24 @@
-import { cn } from '@/shared/lib/classNames'
-import { FC, MutableRefObject, ReactNode, UIEvent, useRef } from 'react'
-import classes from './Page.module.scss'
+import { FC, HTMLAttributes, MutableRefObject, ReactNode, UIEvent, useEffect, useRef } from 'react'
+import classes from './Page.module.css'
 import { useInfiniteScroll } from '@/shared/lib/hooks/useInfiniteScroll/useInfiniteScroll'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
-import { UIActions, getUIScrollByPath } from '@/features/UI'
+import { UIActions } from '@/features/UI'
 import { useLocation } from 'react-router-dom'
-import { useInitialEffect } from '@/shared/lib/hooks'
 import { useSelector } from 'react-redux'
 import { StateSchema } from '@/app/providers/StoreProvider'
 import { useThrottling } from '@/shared/lib/hooks/useThrottling/useThrottling'
-import { TestProps } from '@/shared/types/tests'
 
-interface Props extends TestProps {
-    className?: string
+interface Props extends HTMLAttributes<HTMLDivElement> {
     children: ReactNode
     onScrollEnd?: () => void
 }
 
 export const PAGE_ID = 'page-id'
 
-export const Page: FC<Props> = ({ className, 'data-testid': dataTestId, children, onScrollEnd }) => {
+export const Page: FC<Props> = ({ children, onScrollEnd }) => {
     const dispatch = useAppDispatch()
     const { pathname } = useLocation()
-    const scrollPosition = useSelector((state: StateSchema) => getUIScrollByPath(state, pathname))
+    const scrollPosition = useSelector((state: StateSchema) => state.ui.scroll[pathname])
 
     const triggerRef = useRef() as MutableRefObject<HTMLDivElement>
     const wrapperRef = useRef() as MutableRefObject<HTMLElement>
@@ -33,9 +29,9 @@ export const Page: FC<Props> = ({ className, 'data-testid': dataTestId, children
         callback: onScrollEnd,
     })
 
-    useInitialEffect(() => {
+    useEffect(() => {
         wrapperRef.current.scrollTop = scrollPosition
-    })
+    }, [])
 
     const onScroll = useThrottling((e: UIEvent<HTMLDivElement>) => {
         dispatch(
@@ -45,14 +41,9 @@ export const Page: FC<Props> = ({ className, 'data-testid': dataTestId, children
             })
         )
     }, 400)
+
     return (
-        <main
-            data-testid={dataTestId ?? 'Page'}
-            ref={wrapperRef}
-            className={cn(classes.Page, {}, [className])}
-            onScroll={onScroll}
-            id={PAGE_ID}
-        >
+        <main ref={wrapperRef} onScroll={onScroll} id={PAGE_ID}>
             {children}
             {onScrollEnd ? <div className={classes.trigger} ref={triggerRef} /> : null}
         </main>

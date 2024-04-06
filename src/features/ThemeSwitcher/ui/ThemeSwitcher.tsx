@@ -3,7 +3,7 @@ import LightIcon from '@/shared/assets/icons/theme-light.svg'
 import DarkIcon from '@/shared/assets/icons/theme-dark.svg'
 import { useUIActions } from '@/features/UI'
 import { useAppSelector } from '@/shared/lib/hooks'
-import { Themes } from '@/app/styles/themes/types/Themes'
+import { Themes } from '@/app/styles'
 
 export const ThemeSwitcher = memo(() => {
     const { toggleTheme } = useUIActions()

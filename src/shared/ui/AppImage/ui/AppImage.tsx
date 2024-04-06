@@ -1,13 +1,17 @@
-import { cn } from '@/shared/lib/classNames'
-import { FC, ImgHTMLAttributes, ReactNode, useLayoutEffect, useState } from 'react'
+import { DetailedHTMLProps, FC, ImgHTMLAttributes, ReactNode, useLayoutEffect, useState } from 'react'
+import { IStyledComponent } from 'styled-components'
+import { FastOmit } from 'styled-components/dist/types'
 
 interface Props extends ImgHTMLAttributes<HTMLImageElement> {
-    className?: string
+    StyleComponent?: IStyledComponent<
+        'web',
+        FastOmit<DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>, never>
+    >
     fallback?: ReactNode
     errorFallback?: ReactNode
 }
 
-export const AppImage: FC<Props> = ({ className, src, alt = 'image', fallback, errorFallback, ...otherProps }) => {
+export const AppImage: FC<Props> = ({ StyleComponent, src, alt = 'image', fallback, errorFallback, ...otherProps }) => {
     const [isLoading, setIsLoading] = useState(true)
     const [hasError, setHasError] = useState(false)
 
@@ -31,5 +35,7 @@ export const AppImage: FC<Props> = ({ className, src, alt = 'image', fallback, e
         return errorFallback
     }
 
-    return <img src={src} alt={alt} className={cn('', {}, [className])} {...otherProps} />
+    if (StyleComponent) return <StyleComponent src={src} alt={alt} {...otherProps} />
+
+    return <img src={src} alt={alt} {...otherProps} />
 }

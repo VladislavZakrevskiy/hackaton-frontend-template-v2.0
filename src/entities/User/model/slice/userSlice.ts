@@ -1,16 +1,20 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { UserSchema } from '../types/User'
+import { PayloadAction } from '@reduxjs/toolkit'
+import { User, UserSchema } from '../types/User'
+import { buildSlice } from '@/shared/lib/store/buildSlice'
 
 const initialState: UserSchema = {
     authData: undefined,
     _inited: false,
 }
 
-const userSlice = createSlice({
+const userSlice = buildSlice({
     name: 'user',
     initialState,
-    reducers: {},
-    extraReducers: (builder) => {},
+    reducers: {
+        setAuthData: (state, action: PayloadAction<User>) => {
+            state.authData = action.payload
+        }
+    },
 })
 
-export const { reducer: UserReducer, actions: UserActions } = userSlice
+export const { reducer: UserReducer, actions: UserActions, useActions: useUserActions } = userSlice
