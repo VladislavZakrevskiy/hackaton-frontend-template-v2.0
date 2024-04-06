@@ -1,15 +1,12 @@
-import { cn } from '@/shared/lib/classNames'
 import { FC } from 'react'
-import classes from './Loader.module.scss'
+import { SLoader } from './Loader.style'
 
-interface Props {
-    className?: string
-}
+interface Props {}
 
 // Loader чисто для шаблона - надо менять под дизайн
-export const Loader: FC<Props> = ({ className }) => {
+export const Loader: FC<Props> = () => {
     return (
-        <div className={cn(classes['lds-spinner'], {}, [className])}>
+        <SLoader>
             <div></div>
             <div></div>
             <div></div>
@@ -22,6 +19,6 @@ export const Loader: FC<Props> = ({ className }) => {
             <div></div>
             <div></div>
             <div></div>
-        </div>
+        </SLoader>
     )
 }
