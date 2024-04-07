@@ -1,4 +1,4 @@
-const interfaceConst = 'interface';
+const interfaceConst = "interface";
 
 module.exports = (componentName) => `import styled from 'styled-components'
 import { useTranslation } from 'react-i18next';

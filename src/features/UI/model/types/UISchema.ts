@@ -1,8 +1,8 @@
-import { DefaultTheme } from 'styled-components'
+import { DefaultTheme } from "styled-components";
 
-export type ScrollSchema = Record<string, number>
+export type ScrollSchema = Record<string, number>;
 
 export interface UISchema {
-    scroll: ScrollSchema
-    themeStyles: DefaultTheme
+	scroll: ScrollSchema;
+	themeStyles: DefaultTheme;
 }

@@ -1,1 +1,1 @@
-export { LazyRegisterPage } from './ui/RegisterPage.lazy'
+export { LazyRegisterPage } from "./ui/RegisterPage.lazy";

@@ -1,24 +1,24 @@
-import { FC } from 'react'
-import { SLoader } from './Loader.style'
+import { FC } from "react";
+import { SLoader } from "./Loader.style";
 
 interface Props {}
 
 // Loader чисто для шаблона - надо менять под дизайн
 export const Loader: FC<Props> = () => {
-    return (
-        <SLoader>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </SLoader>
-    )
-}
+	return (
+		<SLoader>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+		</SLoader>
+	);
+};
