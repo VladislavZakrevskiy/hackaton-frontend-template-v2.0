@@ -13,7 +13,7 @@ const App = () => {
 		if (user) setAuthData(user);
 	}, [user]);
 
-	if (!isLoading) {
+	if (isLoading) {
 		return <PageLoader />;
 	}
 

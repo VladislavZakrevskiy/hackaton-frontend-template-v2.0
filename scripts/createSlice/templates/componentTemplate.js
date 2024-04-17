@@ -1,16 +1,12 @@
 const interfaceConst = "interface";
 
-module.exports = (componentName) => `import styled from 'styled-components'
-import { useTranslation } from 'react-i18next';
+module.exports = (componentName) => `import { useTranslation, FC } from 'react-i18next';
 import { memo } from 'react';
+import { S${componentName} } from '${componentName}.style.tsx'
 
 ${interfaceConst} ${componentName}Props {
 
 }
-
-const S${componentName} = styled.div\`
-
-\`
 
 export const ${componentName}: FC<${componentName}Props> = memo((props) => {
     const {} = props;
