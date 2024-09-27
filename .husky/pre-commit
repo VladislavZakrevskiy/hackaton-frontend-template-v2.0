@@ -3,3 +3,4 @@
 
 yarn run lint:ts
 yarn run prettier
+# Предположительно тестики если хватит времени/cил
