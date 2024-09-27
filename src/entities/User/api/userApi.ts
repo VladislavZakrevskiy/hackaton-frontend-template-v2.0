@@ -4,8 +4,12 @@ import { User } from "../model/types/User";
 
 const userApi = rtkApi.injectEndpoints({
 	endpoints: (build) => ({
-		getMe: build.query<User, undefined>({
+		getMe: build.query<User, void>({
 			query: () => "/user",
+		}),
+
+		refresh: build.query<string, void>({
+			query: () => "/refresh",
 		}),
 
 		register: build.mutation<User & { accessToken: string }, SignInDto>({

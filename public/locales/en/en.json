@@ -1,0 +1,19 @@
+{
+  "login": "Login",
+  "username": "Login",
+  "password": "Password",
+  "submit": "Login",
+  "submit_reg": "Register",
+  "register": "Registration",
+  "confirmPassword": "Password again",
+  "usernameRequired": "Login is required",
+  "emailRequired": "Email is required",
+  "passwordRequired": "Password is required",
+  "passwordsDoNotMatch": "Password are not same",
+  "confirmPasswordRequired": "Password again is required",
+  "emailInvalid": "Email is invalid",
+  "error": "Error",
+  "sorry": "Sorry, navigate to main page",
+  "to main page": "To main page",
+  "login_page": "Login"
+}

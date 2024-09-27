@@ -1,6 +1,6 @@
-import { Component, ErrorInfo, ReactNode, Suspense } from "react";
-import { PageError } from "@/widgets/PageError";
+import { ErrorCard } from "@/widgets/ErrorCard";
 import { PageLoader } from "@/widgets/PageLoader";
+import { Component, ErrorInfo, ReactNode, Suspense } from "react";
 
 interface ErrorBoundaryProps {
 	children: ReactNode;
@@ -16,6 +16,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 		this.state = { hasError: false };
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	static getDerivedStateFromError(error: Error) {
 		return { hasError: true };
 	}
@@ -31,7 +32,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 		if (hasError) {
 			return (
 				<Suspense fallback={<PageLoader />}>
-					<PageError />
+					<ErrorCard />
 				</Suspense>
 			);
 		}

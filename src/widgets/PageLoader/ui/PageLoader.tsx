@@ -1,13 +1,9 @@
-import { FC } from "react";
-import { Loader } from "@/shared/ui/Loader";
-import { SPageLoader } from "./PageLoader.style";
+import { CircularProgress } from "@mui/material";
 
-interface Props {}
-
-export const PageLoader: FC<Props> = () => {
+export const PageLoader = () => {
 	return (
-		<SPageLoader>
-			<Loader />
-		</SPageLoader>
+		<div className="w-screen h-screen flex justify-center items-center">
+			<CircularProgress size={60} />
+		</div>
 	);
 };

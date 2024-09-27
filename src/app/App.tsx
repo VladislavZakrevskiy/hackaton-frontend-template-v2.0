@@ -1,9 +1,8 @@
 import { Suspense, useEffect } from "react";
 import { AppRouter } from "./providers/router";
-import { PageLoader } from "@/widgets/PageLoader";
-import { GlobalStyles } from "./styles/globalStyles";
 import { useGetMeQuery } from "@/entities/User/api/userApi";
 import { useUserActions } from "@/entities/User";
+import { PageLoader } from "@/widgets/PageLoader";
 
 const App = () => {
 	const { data: user, isLoading } = useGetMeQuery(undefined);
@@ -19,7 +18,6 @@ const App = () => {
 
 	return (
 		<div>
-			<GlobalStyles />
 			<Suspense fallback={<PageLoader />}>
 				{/* <Navbar /> */}
 				<div className="content-page">
