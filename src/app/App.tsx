@@ -17,15 +17,11 @@ const App = () => {
 	}
 
 	return (
-		<div>
-			<Suspense fallback={<PageLoader />}>
-				{/* <Navbar /> */}
-				<div className="content-page">
-					{/* <Sidebar /> */}
-					<AppRouter />
-				</div>
-			</Suspense>
-		</div>
+		<Suspense fallback={<PageLoader />}>
+			{/* <Navbar /> */}
+			{/* <Sidebar /> */}
+			<AppRouter />
+		</Suspense>
 	);
 };
 

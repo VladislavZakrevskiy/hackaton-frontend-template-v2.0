@@ -10,7 +10,7 @@ const LoginPage = () => {
 	return (
 		<Container
 			sx={{
-				backgroundImage: "url(/login.webp)",
+				backgroundImage: "url(/login.JPG)",
 				backgroundSize: "cover",
 				backgroundPosition: "center",
 			}}

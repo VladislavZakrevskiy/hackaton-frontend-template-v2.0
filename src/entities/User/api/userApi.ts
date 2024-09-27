@@ -1,37 +1,53 @@
 import { rtkApi } from "@/shared/api/rtkApi";
-import { SignInDto } from "../model/types/dto/SignInDto";
-import { User } from "../model/types/User";
+import { User } from "../model/types/ProfileUserDto";
+import { LoginDto, RegisterDto } from "../model/types/SignInDto";
 
 const userApi = rtkApi.injectEndpoints({
 	endpoints: (build) => ({
 		getMe: build.query<User, void>({
-			query: () => "/user",
+			query: () => "/profile",
+		}),
+
+		getUser: build.query<User, string>({
+			query: (user_id) => "/profile/" + user_id,
+		}),
+
+		getProjectUsers: build.query<User[], string>({
+			query: (project_id) => `/project/${project_id}/user`,
 		}),
 
 		refresh: build.query<string, void>({
 			query: () => "/refresh",
 		}),
 
-		register: build.mutation<User & { accessToken: string }, SignInDto>({
+		register: build.mutation<User & { accessToken: string }, RegisterDto>({
 			query: (authData) => ({
-				url: "user/register",
+				url: "/registration",
 				body: authData,
 				method: "POST",
 			}),
 		}),
 
-		signIn: build.mutation<User & { accessToken: string }, SignInDto>({
+		signIn: build.mutation<User & { accessToken: string }, LoginDto>({
 			query: (authData) => ({
-				url: "/user/signIn",
+				url: "/login",
 				body: authData,
 				method: "POST",
 			}),
 		}),
 
 		signOut: build.mutation({
-			query: () => "/user/signOut",
+			query: () => "/logout",
 		}),
 	}),
 });
 
-export const { useRegisterMutation, useSignInMutation, useSignOutMutation, useGetMeQuery } = userApi;
+export const {
+	useRegisterMutation,
+	useGetProjectUsersQuery,
+	useSignInMutation,
+	useSignOutMutation,
+	useGetMeQuery,
+	useGetUserQuery,
+	useLazyRefreshQuery,
+} = userApi;

@@ -1,5 +1,13 @@
-export { useRegisterMutation, useSignInMutation, useSignOutMutation } from "./api/userApi";
-export type { SignInDto } from "./model/types/dto/SignInDto";
+export type { User } from "./model/types/ProfileUserDto";
 export { UserActions, UserReducer, useUserActions } from "./model/slice/userSlice";
-export type { User, UserSchema } from "./model/types/User";
+export type { UserSchema } from "./model/types/UserSchema";
 export { UserRoles } from "./model/consts/UserRoles";
+export {
+	useGetMeQuery,
+	useGetProjectUsersQuery,
+	useGetUserQuery,
+	useLazyRefreshQuery,
+	useRegisterMutation,
+	useSignInMutation,
+	useSignOutMutation,
+} from "./api/userApi";

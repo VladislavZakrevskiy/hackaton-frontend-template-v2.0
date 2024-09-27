@@ -10,9 +10,11 @@ const RegisterPage = () => {
 	return (
 		<Container
 			sx={{
-				backgroundImage: "url(/register.jpeg)",
+				backgroundImage: "url(/register.jpg)",
 				backgroundSize: "cover",
 				backgroundPosition: "center",
+				filter: "brightness(0.9)",
+				backgroundColor: "#FFFDD0",
 			}}
 			className="w-screen h-screen flex justify-center items-center"
 		>
