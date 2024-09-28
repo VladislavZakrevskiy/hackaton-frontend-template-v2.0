@@ -1,6 +1,7 @@
 import { rtkApi } from "@/shared/api/rtkApi";
 import { User } from "../model/types/ProfileUserDto";
 import { LoginDto, RegisterDto } from "../model/types/SignInDto";
+import { RefreshDto } from "../model/types/RefreshDto";
 
 const userApi = rtkApi.injectEndpoints({
 	endpoints: (build) => ({
@@ -16,11 +17,11 @@ const userApi = rtkApi.injectEndpoints({
 			query: (project_id) => `/project/${project_id}/user`,
 		}),
 
-		refresh: build.query<string, void>({
+		refresh: build.query<RefreshDto, void>({
 			query: () => "/refresh",
 		}),
 
-		register: build.mutation<User & { accessToken: string }, RegisterDto>({
+		register: build.mutation<void, RegisterDto>({
 			query: (authData) => ({
 				url: "/registration",
 				body: authData,
@@ -28,9 +29,9 @@ const userApi = rtkApi.injectEndpoints({
 			}),
 		}),
 
-		signIn: build.mutation<User & { accessToken: string }, LoginDto>({
+		signIn: build.mutation<{ accessToken: string; refreshToken: string }, LoginDto>({
 			query: (authData) => ({
-				url: "/login",
+				url: "/auth",
 				body: authData,
 				method: "POST",
 			}),
@@ -50,4 +51,5 @@ export const {
 	useGetMeQuery,
 	useGetUserQuery,
 	useLazyRefreshQuery,
+	useLazyGetMeQuery,
 } = userApi;

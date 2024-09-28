@@ -5,6 +5,7 @@ import { createReducerManager } from "./reducerManager";
 import { $api } from "@/shared/api/api";
 import { rtkApi } from "@/shared/api/rtkApi";
 import { ThemeReducer } from "../../ThemeProvider";
+import { SidebarReducer } from "@/widgets/SideBar";
 // import { NavigateOptions, To } from 'react-router-dom'
 
 export const createReduxStore = (
@@ -16,6 +17,7 @@ export const createReduxStore = (
 		...asyncReducers,
 		user: UserReducer,
 		theme: ThemeReducer,
+		sidebar: SidebarReducer,
 		[rtkApi.reducerPath]: rtkApi.reducer,
 	};
 

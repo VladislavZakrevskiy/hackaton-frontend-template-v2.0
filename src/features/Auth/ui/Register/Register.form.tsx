@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { TextField, Button, Typography, Paper } from "@mui/material";
+import { TextField, Button, Typography, Paper, CircularProgress } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { useRegisterMutation } from "@/entities/User";
+import { useNavigate } from "react-router-dom";
+import { getRouteLogin } from "@/shared/consts/router";
 
 interface RegisterFormData {
+	fullName: string;
 	username: string;
 	email: string;
 	password: string;
@@ -12,6 +16,8 @@ interface RegisterFormData {
 
 export const RegisterForm: React.FC = () => {
 	const { t } = useTranslation();
+	const [registerUser, { isSuccess, isLoading }] = useRegisterMutation();
+	const nav = useNavigate();
 
 	const {
 		register,
@@ -20,8 +26,20 @@ export const RegisterForm: React.FC = () => {
 		watch,
 	} = useForm<RegisterFormData>();
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const onSubmit: SubmitHandler<RegisterFormData> = (data) => {};
+	const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
+		await registerUser({
+			email: data.email,
+			fullName: data.fullName,
+			password: data.password,
+			username: data.username,
+		});
+	};
+
+	useEffect(() => {
+		if (isSuccess) {
+			nav(getRouteLogin());
+		}
+	}, [isSuccess]);
 
 	const password = watch("password");
 
@@ -46,8 +64,17 @@ export const RegisterForm: React.FC = () => {
 			<TextField
 				label={t("username")}
 				{...register("username", { required: t("usernameRequired") })}
-				error={!!errors.username}
-				helperText={errors.username?.message}
+				error={!!errors.fullName}
+				helperText={errors.fullName?.message}
+				fullWidth
+				sx={{ mb: 2 }}
+			/>
+
+			<TextField
+				label={t("fullName")}
+				{...register("fullName", { required: t("fullNameRequired") })}
+				error={!!errors.fullName}
+				helperText={errors.fullName?.message}
 				fullWidth
 				sx={{ mb: 2 }}
 			/>
@@ -92,7 +119,7 @@ export const RegisterForm: React.FC = () => {
 			/>
 
 			<Button variant="contained" color="primary" type="submit" size="large" fullWidth>
-				{t("submit")}
+				{isLoading ? <CircularProgress size={20} color="secondary" /> : t("submit")}
 			</Button>
 		</Paper>
 	);

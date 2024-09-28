@@ -10,4 +10,5 @@ export {
 	useRegisterMutation,
 	useSignInMutation,
 	useSignOutMutation,
+	useLazyGetMeQuery,
 } from "./api/userApi";

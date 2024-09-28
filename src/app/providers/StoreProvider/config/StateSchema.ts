@@ -4,10 +4,12 @@ import { UserSchema } from "@/entities/User";
 import { NavigateOptions, To } from "react-router-dom";
 import { rtkApi } from "@/shared/api/rtkApi";
 import { ThemeSchema } from "../../ThemeProvider";
+import { SidebarSchema } from "@/widgets/SideBar";
 
 export interface StateSchema {
 	user: UserSchema;
 	theme: ThemeSchema;
+	sidebar: SidebarSchema;
 	[rtkApi.reducerPath]: ReturnType<typeof rtkApi.reducer>;
 
 	// Async reducers

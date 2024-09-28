@@ -1,23 +1,19 @@
 import { memo, useCallback } from "react";
-import LightIcon from "@/shared/assets/icons/theme-light.svg";
-import DarkIcon from "@/shared/assets/icons/theme-dark.svg";
-import { useUIActions } from "@/features/UI";
 import { useAppSelector } from "@/shared/lib/hooks";
-import { Themes } from "@/app/styles";
+import { useThemeActions } from "@/app/providers/ThemeProvider";
 
 export const ThemeSwitcher = memo(() => {
-	const { toggleTheme } = useUIActions();
-	const { type } = useAppSelector((state) => state.ui.themeStyles);
+	const { setTheme } = useThemeActions();
+	const { mode } = useAppSelector((state) => state.theme);
+	const image_url = mode === "base" ? "/public/themes/lenin.png" : "/public/themes/stalin.png";
 
 	const onToggle = useCallback(() => {
-		toggleTheme();
-	}, []);
+		setTheme(mode === "base" ? "dark" : "base");
+	}, [mode]);
 
 	return (
 		<button onClick={onToggle}>
-			{/* <Button onClick={onToggle}> */}
-			{type === Themes.dark ? <DarkIcon /> : <LightIcon />}
-			{/* </Button> */}
+			<img className="w-[25px] h-[25px] mx-2" src={image_url} alt={mode + " theme icon"} />
 		</button>
 	);
 });

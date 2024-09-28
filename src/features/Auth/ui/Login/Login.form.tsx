@@ -1,6 +1,10 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
-import { TextField, Button, Typography, Paper } from "@mui/material";
+import { TextField, Button, Typography, Paper, CircularProgress } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { useLazyGetMeQuery, useSignInMutation, useUserActions } from "@/entities/User";
+import { getRouteMain } from "@/shared/consts/router";
+import { useNavigate } from "react-router-dom";
+import { USER_ACCESS_TOKEN, USER_REFRESH_TOKEN } from "@/shared/consts/localStorage";
 
 interface LoginFormData {
 	username: string;
@@ -9,11 +13,14 @@ interface LoginFormData {
 
 export const LoginForm: React.FC = () => {
 	const { t } = useTranslation();
-
+	const [signIn, { isLoading }] = useSignInMutation();
+	const [getMe] = useLazyGetMeQuery();
 	const [formData, setFormData] = useState<LoginFormData>({
 		username: "",
 		password: "",
 	});
+	const { setAuthData } = useUserActions();
+	const nav = useNavigate();
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setFormData({
@@ -22,13 +29,25 @@ export const LoginForm: React.FC = () => {
 		});
 	};
 
-	const handleSubmit = (e: FormEvent) => {
+	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
+		if (formData.password && formData.username) {
+			const { accessToken, refreshToken } = await signIn(formData).unwrap();
+			localStorage.setItem(USER_ACCESS_TOKEN, accessToken);
+			localStorage.setItem(USER_REFRESH_TOKEN, refreshToken);
+			console.log(accessToken, refreshToken);
+
+			const { data } = await getMe();
+			if (data) {
+				nav(getRouteMain());
+				console.log(data);
+				setAuthData(data);
+			}
+		}
 	};
 
 	return (
 		<Paper
-			onSubmit={handleSubmit}
 			sx={{
 				display: "flex",
 				flexDirection: "column",
@@ -65,8 +84,8 @@ export const LoginForm: React.FC = () => {
 				sx={{ mb: 2 }}
 			/>
 
-			<Button variant="contained" color="primary" type="submit" size="large" fullWidth>
-				{t("submit")}
+			<Button onClick={handleSubmit} variant="contained" color="primary" type="submit" size="large" fullWidth>
+				{isLoading ? <CircularProgress size={20} color="secondary" /> : t("submit")}
 			</Button>
 		</Paper>
 	);
