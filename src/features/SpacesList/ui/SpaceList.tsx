@@ -1,7 +1,7 @@
 import { useGetProjectSpacesQuery } from "@/entities/Space";
 import { getRouteSpacePage } from "@/shared/consts/router";
 import { useAppSelector } from "@/shared/lib/hooks";
-import { CircularProgress, ListItem, Paper, Typography, useTheme } from "@mui/material";
+import { CircularProgress, List, ListItem, ListSubheader, Paper, Typography, useTheme } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -45,6 +45,7 @@ export const SpaceList = () => {
 
 	return (
 		<List
+			subheader={<ListSubheader>{t("spaces")}</ListSubheader>}
 			sx={{
 				p: 2,
 				width: "100%",
@@ -55,9 +56,6 @@ export const SpaceList = () => {
 				boxShadow: `3px 3px 0 2px ${theme.palette.text.primary}`,
 			}}
 		>
-			<Typography variant="h6" className="text-center">
-				{t("spaces")}
-			</Typography>
 			{data?.map((space) => (
 				<ListItem>
 					<Link to={getRouteSpacePage(project?.id || 0, space.id)}>{space.name}</Link>
