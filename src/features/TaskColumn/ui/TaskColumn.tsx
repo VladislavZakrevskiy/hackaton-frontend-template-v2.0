@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Droppable } from "react-beautiful-dnd";
-import { Paper, Typography, Box, List } from "@mui/material";
+import { Paper, Typography, Box, List, ListItem } from "@mui/material";
 import { Task, TaskCard } from "@/entities/Task";
+import { Add } from "@mui/icons-material";
 
 interface TaskColumnProps {
 	columnId: number;
@@ -9,7 +10,7 @@ interface TaskColumnProps {
 	taskIds: number[];
 	tasks: Task[];
 	columnWidth: number;
-	onColumnResize: (newWidth: number) => void;
+	// onColumnResize: (newWidth: number) => void;
 }
 
 export const TaskColumn: React.FC<TaskColumnProps> = ({
@@ -18,36 +19,36 @@ export const TaskColumn: React.FC<TaskColumnProps> = ({
 	taskIds,
 	tasks,
 	columnWidth,
-	onColumnResize,
+	// onColumnResize,
 }) => {
-	useEffect(() => {
-		const handleMouseMove = (event: MouseEvent) => {
-			onColumnResize(event.clientX);
-		};
+	// useEffect(() => {
+	// const handleMouseMove = (event: MouseEvent) => {
+	// onColumnResize(event.clientX);
+	// 	};
 
-		const handleMouseUp = () => {
-			window.removeEventListener("mousemove", handleMouseMove);
-			window.removeEventListener("mouseup", handleMouseUp);
-		};
+	// 	const handleMouseUp = () => {
+	// 		window.removeEventListener("mousemove", handleMouseMove);
+	// 		window.removeEventListener("mouseup", handleMouseUp);
+	// 	};
 
-		const handleMouseDown = () => {
-			window.addEventListener("mousemove", handleMouseMove);
-			window.addEventListener("mouseup", handleMouseUp);
-		};
+	// 	const handleMouseDown = () => {
+	// 		window.addEventListener("mousemove", handleMouseMove);
+	// 		window.addEventListener("mouseup", handleMouseUp);
+	// 	};
 
-		const resizer = document.getElementById(`resizer-${columnId}`);
-		if (resizer) {
-			resizer.addEventListener("mousedown", handleMouseDown);
-		}
+	// 	const resizer = document.getElementById(`resizer-${columnId}`);
+	// 	if (resizer) {
+	// 		resizer.addEventListener("mousedown", handleMouseDown);
+	// 	}
 
-		return () => {
-			if (resizer) {
-				resizer.removeEventListener("mousedown", handleMouseDown);
-			}
-			window.removeEventListener("mousemove", handleMouseMove);
-			window.removeEventListener("mouseup", handleMouseUp);
-		};
-	}, [columnId]);
+	// 	return () => {
+	// 		if (resizer) {
+	// 			resizer.removeEventListener("mousedown", handleMouseDown);
+	// 		}
+	// 		window.removeEventListener("mousemove", handleMouseMove);
+	// 		window.removeEventListener("mouseup", handleMouseUp);
+	// 	};
+	// }, [columnId]);
 	return (
 		<Paper
 			sx={{
@@ -81,6 +82,20 @@ export const TaskColumn: React.FC<TaskColumnProps> = ({
 						}}
 					>
 						<List sx={{ minHeight: "100%" }}>
+							<ListItem
+								ref={provided.innerRef}
+								sx={{
+									marginBottom: 1,
+									display: "flex",
+									justifyContent: "center",
+									alignItems: "center",
+
+									backgroundColor: "background.default",
+									borderRadius: 1,
+								}}
+							>
+								<Add fontSize="large" />
+							</ListItem>
 							{taskIds.map((taskId, index) => {
 								const task = tasks.find((t) => t.id === taskId);
 								return task ? (

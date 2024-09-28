@@ -45,15 +45,12 @@ export const SpaceList = () => {
 
 	return (
 		<List
-			subheader={<ListSubheader>{t("spaces")}</ListSubheader>}
+			subheader={<ListSubheader className="w-full">{t("spaces")}</ListSubheader>}
 			sx={{
 				p: 2,
-				width: "100%",
 				display: "flex",
 				flexDirection: "column",
-				justifyContent: "center",
 				alignItems: "center",
-				boxShadow: `3px 3px 0 2px ${theme.palette.text.primary}`,
 			}}
 		>
 			{data?.map((space) => (

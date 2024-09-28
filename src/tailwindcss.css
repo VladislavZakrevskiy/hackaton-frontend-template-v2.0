@@ -10,3 +10,7 @@
 * {
     font-family: "Soviet", sans-serif;
 }
+
+body::-webkit-scrollbar {
+    display: none;
+}

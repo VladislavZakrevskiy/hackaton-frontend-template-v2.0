@@ -15,7 +15,9 @@ const ProjectSlice = buildSlice({
 	name: "project",
 	initialState,
 	reducers: {
-		setCurrentSpace: () => {},
+		setCurrentSpace: (store, action: PayloadAction<Space>) => {
+			store.current_space = action.payload;
+		},
 
 		// STUPID CRUD!!!!!!!!
 		addTask: (store, action: PayloadAction<Task & { space_id: number; status_id: number }>) => {

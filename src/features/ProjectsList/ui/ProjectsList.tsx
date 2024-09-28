@@ -49,7 +49,14 @@ export const ProjectsList: FC<ProjectsListProps> = ({ isShort }) => {
 
 	if (isShort) {
 		return (
-			<List subheader={<ListSubheader component={"div"}>{t("projects")}</ListSubheader>}>
+			<List
+				className="flex flex-col gap-1 items-center"
+				subheader={
+					<ListSubheader className="w-full" component={"div"}>
+						{t("projects")}
+					</ListSubheader>
+				}
+			>
 				{data.map((project) => (
 					<Link key={project.id} to={getRouteProjectPage(project.id)}>
 						{project.name}
@@ -64,17 +71,24 @@ export const ProjectsList: FC<ProjectsListProps> = ({ isShort }) => {
 			sx={{
 				p: 2,
 				boxShadow: `3px 3px 0 2px ${theme.palette.text.primary}`,
-				overflowY: "hidden",
 				gap: 3,
-				display: "flex",
-				justifyContent: "center",
-				alignItems: "center",
 			}}
 		>
 			<Typography variant="h6">{t("projects")}</Typography>
-			{data.map((project) => (
-				<ProjectCard key={project.id} project={project} />
-			))}
+			<div
+				style={{
+					display: "flex",
+					flexWrap: "wrap",
+					gap: 10,
+					width: "100%",
+					justifyContent: "center",
+					alignItems: "center",
+				}}
+			>
+				{data.map((project) => (
+					<ProjectCard key={project.id} project={project} />
+				))}
+			</div>
 		</Paper>
 	);
 };

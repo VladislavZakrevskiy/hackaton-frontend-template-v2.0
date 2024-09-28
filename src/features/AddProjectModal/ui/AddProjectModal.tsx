@@ -1,5 +1,6 @@
 import { useModalManagerActions } from "@/app/managers/ModalManager/ModalManager";
 import { useCreateProjectMutation } from "@/entities/Project";
+import { useCreateSpaceMutation } from "@/entities/Space";
 import { getRouteProjectPage } from "@/shared/consts/router";
 import { useAppSelector } from "@/shared/lib/hooks";
 import { Button, Modal, Paper, TextField, Typography } from "@mui/material";
@@ -10,6 +11,8 @@ import { useNavigate } from "react-router-dom";
 
 interface AddProjectFormData {
 	name: string;
+	space_desc: string;
+	space_name: string;
 }
 
 export const AddProjectModal = () => {
@@ -17,6 +20,7 @@ export const AddProjectModal = () => {
 	const { setIsOpen } = useModalManagerActions();
 	const { t } = useTranslation();
 	const [createProject, { isSuccess, data }] = useCreateProjectMutation();
+	const [createSpace] = useCreateSpaceMutation();
 	const nav = useNavigate();
 
 	const {
@@ -25,8 +29,9 @@ export const AddProjectModal = () => {
 		formState: { errors },
 	} = useForm<AddProjectFormData>();
 
-	const onSubmit: SubmitHandler<AddProjectFormData> = (data) => {
-		createProject({ name: data.name });
+	const onSubmit: SubmitHandler<AddProjectFormData> = async (data) => {
+		const { id } = await createProject({ name: data.name }).unwrap();
+		await createSpace({ project_id: id, description: data.space_desc, name: data.space_name });
 	};
 
 	useEffect(() => {
@@ -66,6 +71,18 @@ export const AddProjectModal = () => {
 					<TextField
 						label={t("name")}
 						{...register("name", { required: t("nameRequired") })}
+						error={!!errors.name?.message}
+						helperText={errors.name?.message}
+					/>
+					<TextField
+						label={t("space name")}
+						{...register("space_name", { required: t("spaceNameRequired") })}
+						error={!!errors.name?.message}
+						helperText={errors.name?.message}
+					/>
+					<TextField
+						label={t("space_desc")}
+						{...register("space_desc", { required: t("spaceDescRequired") })}
 						error={!!errors.name?.message}
 						helperText={errors.name?.message}
 					/>

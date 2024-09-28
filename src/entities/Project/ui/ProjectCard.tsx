@@ -35,7 +35,7 @@ export const ProjectCard = ({ project }: ProjectProps) => {
 	const nav = useNavigate();
 
 	return (
-		<Card sx={{ bgcolor: theme.palette.grey[400], borderRadius: 4 }}>
+		<Card sx={{ bgcolor: theme.palette.grey[400], borderRadius: 4, width: "30%" }}>
 			<SpaceMedia img={project.image} name={project.name} />
 			<CardContent>
 				<Typography gutterBottom variant="h5" component="div">

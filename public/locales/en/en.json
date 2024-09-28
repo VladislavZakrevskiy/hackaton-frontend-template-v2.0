@@ -35,5 +35,10 @@
   "nameRequired": "Name is required",
   "name": "Name",
   "open": "Open",
-  "delete": "Delete"
+  "delete": "Delete",
+  "space name": "First WorkPlace name",
+  "spaceNameRequired": "Workspace name is required",
+  "space_desc": "Workspace description",
+  "spaceDescRequired": "Workspace description is required",
+  "status": "Status"
 }

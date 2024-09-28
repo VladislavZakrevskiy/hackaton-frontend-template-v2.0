@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next";
 import { ThemeSwitcher } from "@/features/ThemeSwitcher";
 import { LanguageSwitcher } from "@/features/LanguageSwitcher";
 import { Modals, useModalManagerActions } from "@/app/managers";
+import { Link } from "react-router-dom";
+import { getRouteMain } from "@/shared/consts/router";
 
 export const Navbar: React.FC = () => {
 	const theme = useTheme();
@@ -15,9 +17,9 @@ export const Navbar: React.FC = () => {
 	return (
 		<AppBar position="static" sx={{ backgroundColor: theme.palette.primary.main }}>
 			<Toolbar sx={{ backgroundColor: theme.palette.primary.main }}>
-				<Typography variant="h6" sx={{ flexGrow: 1 }}>
-					{t("sovet proj")}
-				</Typography>
+				<Link style={{ flexGrow: 1 }} to={getRouteMain()}>
+					<Typography variant="h6">{t("sovet proj")}</Typography>
+				</Link>
 
 				<div className="flex items-center justify-around gap-2">
 					<Button
