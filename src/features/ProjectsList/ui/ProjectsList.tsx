@@ -1,7 +1,7 @@
 import { useGetProjectsQuery } from "@/entities/Project";
 import { ProjectCard } from "@/entities/Project/ui/ProjectCard";
 import { getRouteProjectPage } from "@/shared/consts/router";
-import { CircularProgress, List, ListItem, ListSubheader, Paper, Typography, useTheme } from "@mui/material";
+import { CircularProgress, List, ListSubheader, Paper, Typography, useTheme } from "@mui/material";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -51,9 +51,9 @@ export const ProjectsList: FC<ProjectsListProps> = ({ isShort }) => {
 		return (
 			<List subheader={<ListSubheader component={"div"}>{t("projects")}</ListSubheader>}>
 				{data.map((project) => (
-					<ListItem key={project.id}>
-						<Link to={getRouteProjectPage(project.id)}>{project.name}</Link>
-					</ListItem>
+					<Link key={project.id} to={getRouteProjectPage(project.id)}>
+						{project.name}
+					</Link>
 				))}
 			</List>
 		);

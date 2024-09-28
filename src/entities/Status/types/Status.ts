@@ -1,7 +1,7 @@
 import { Task } from "@/entities/Task";
 
 export interface Status {
-	id: string;
+	id: number;
 	name: string;
 	tasks: Task[];
 }

@@ -4,13 +4,14 @@ import { Box, CircularProgress, debounce } from "@mui/material";
 import { TaskColumn } from "@/features/TaskColumn";
 import { Task } from "@/entities/Task";
 import { COLUMN_WIDTH } from "@/shared/consts/localStorage";
-import { Space, useCreateSpaceMutation } from "@/entities/Space";
+import { useCreateSpaceMutation } from "@/entities/Space";
 import { Add } from "@mui/icons-material";
 import { useProjectActions } from "@/entities/Project/model/slices/ProjectSlice";
 import { useAppSelector } from "@/shared/lib/hooks";
+import { Status } from "@/entities/Status";
 
 interface TaskBoardProps {
-	columns: Space[];
+	columns: Status[];
 	tasks: Task[];
 }
 

@@ -4,20 +4,37 @@ import { buildSlice } from "@/shared/lib/store/buildSlice";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { ProjectSchema } from "../types/ProjectSchema";
 import { Project } from "../types/GetProjectDto";
+import { Status } from "@/entities/Status";
 
 const initialState: ProjectSchema = {
 	project: null,
+	current_space: null,
 };
 
 const ProjectSlice = buildSlice({
 	name: "project",
 	initialState,
 	reducers: {
-		addTask: (store, action: PayloadAction<Task & { space_id: number }>) => {
-			const { space_id, ...task } = action.payload;
+		setCurrentSpace: () => {},
+
+		// STUPID CRUD!!!!!!!!
+		addTask: (store, action: PayloadAction<Task & { space_id: number; status_id: number }>) => {
+			const { space_id, status_id, ...task } = action.payload;
 			const space_index = store.project?.spaces.findIndex(({ id }) => id === space_id);
 			if (space_index && store.project?.spaces?.[space_index]) {
-				store.project?.spaces?.[space_index].tasks.push(task);
+				for (let i = 0; i < store.project?.spaces?.[space_index].statuses.length; i++) {
+					const status = store.project?.spaces?.[space_index].statuses[i];
+					if (status.id === status_id) {
+						store.project?.spaces?.[space_index].statuses[i].tasks.push(task);
+					}
+				}
+			}
+		},
+		addStatus: (store, action: PayloadAction<{ space_id: number } & Status>) => {
+			if (store.project?.spaces) {
+				const { space_id, ...status } = action.payload;
+				const space_index = store.project?.spaces.findIndex(({ id }) => id === space_id);
+				store.project.spaces[space_index].statuses.push(status);
 			}
 		},
 
@@ -25,13 +42,17 @@ const ProjectSlice = buildSlice({
 			store.project?.spaces.push(action.payload);
 		},
 
-		removeTask: (store, action: PayloadAction<{ space_id: number; task_id: number }>) => {
-			const { space_id, task_id } = action.payload;
+		removeTask: (store, action: PayloadAction<{ space_id: number; status_id: number; task_id: number }>) => {
+			const { space_id, task_id, status_id } = action.payload;
 			const space_index = store.project?.spaces.findIndex(({ id }) => id === space_id);
-			if (space_index && store.project?.spaces && store.project?.spaces?.[space_index]) {
-				store.project.spaces[space_index].tasks = store.project?.spaces[space_index].tasks.filter(
-					({ id }) => id !== task_id,
-				);
+			if (space_index) {
+				const status_index = store.project?.spaces[space_index].statuses.findIndex(({ id }) => id === status_id);
+				if (status_index) {
+					//@ts-ignore
+					store.project!.spaces[space_index].statuses[status_index].tasks = store.project?.spaces[space_index].statuses[
+						status_index
+					].tasks.filter(({ id }) => id !== task_id);
+				}
 			}
 		},
 
@@ -41,16 +62,26 @@ const ProjectSlice = buildSlice({
 			}
 		},
 
-		updateTask: (store, action: PayloadAction<Task & { space_id: number }>) => {
-			const { space_id, ...task } = action.payload;
+		updateTask: (store, action: PayloadAction<Task & { space_id: number; status_id: number }>) => {
+			const { space_id, status_id, ...task } = action.payload;
 			const space_index = store.project?.spaces.findIndex(({ id }) => id === space_id);
-			if (space_index && store.project?.spaces?.[space_index]) {
-				for (let i = 0; i < store.project?.spaces?.[space_index].tasks.length; i++) {
-					const task_candidate = store.project?.spaces?.[space_index].tasks[i];
-					if (task.id === task_candidate.id) {
-						store.project.spaces[space_index].tasks[i] = task;
-					}
+			if (space_index) {
+				const status_index = store.project?.spaces[space_index].statuses.findIndex(({ id }) => id === status_id);
+				if (status_index) {
+					const task_index = store.project?.spaces[space_index].statuses[status_index].tasks.findIndex(
+						({ id }) => id === task.id,
+					);
+					store.project!.spaces[space_index].statuses[status_index].tasks[task_index!] = task;
 				}
+			}
+		},
+
+		updateStatus: (store, action: PayloadAction<Status & { space_id: number }>) => {
+			if (store.project?.spaces) {
+				const { space_id, ...status } = action.payload;
+				const space_index = store.project?.spaces.findIndex(({ id }) => id === space_id);
+				const status_index = store.project.spaces[space_index].statuses.findIndex(({ id }) => id === space_id);
+				store.project.spaces[space_index].statuses[status_index!] = status;
 			}
 		},
 

@@ -1,16 +1,13 @@
 import { useGetProjectSpacesQuery } from "@/entities/Space";
 import { getRouteSpacePage } from "@/shared/consts/router";
+import { useAppSelector } from "@/shared/lib/hooks";
 import { CircularProgress, ListItem, Paper, Typography, useTheme } from "@mui/material";
-import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-export interface SpaceListProps {
-	project_id: number;
-}
-
-export const SpaceList: FC<SpaceListProps> = ({ project_id }) => {
-	const { isLoading, data } = useGetProjectSpacesQuery({ project_id });
+export const SpaceList = () => {
+	const { project } = useAppSelector((state) => state.project);
+	const { isLoading, data } = useGetProjectSpacesQuery({ project_id: project?.id || 1 });
 	const { t } = useTranslation();
 	const theme = useTheme();
 
@@ -47,22 +44,25 @@ export const SpaceList: FC<SpaceListProps> = ({ project_id }) => {
 	}
 
 	return (
-		<Paper
+		<List
 			sx={{
 				p: 2,
 				width: "100%",
 				display: "flex",
+				flexDirection: "column",
 				justifyContent: "center",
 				alignItems: "center",
 				boxShadow: `3px 3px 0 2px ${theme.palette.text.primary}`,
 			}}
 		>
-			<Typography variant="h6">{t("spaces")}</Typography>
+			<Typography variant="h6" className="text-center">
+				{t("spaces")}
+			</Typography>
 			{data?.map((space) => (
 				<ListItem>
-					<Link to={getRouteSpacePage(space.id)}>{space.name}</Link>
+					<Link to={getRouteSpacePage(project?.id || 0, space.id)}>{space.name}</Link>
 				</ListItem>
 			))}
-		</Paper>
+		</List>
 	);
 };
