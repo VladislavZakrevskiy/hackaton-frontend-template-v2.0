@@ -5,8 +5,8 @@ import {
 	getRouteLogin,
 	getRouteMain,
 	getRouteNotFound,
-	getRouteProjectPage,
 	getRouteRegister,
+	getRouteSpacePage,
 } from "@/shared/consts/router";
 import { AppRouteProps } from "@/shared/types/router";
 import { LazyLoginPage } from "@/pages/Login";
@@ -32,7 +32,7 @@ export const routeConfig: Record<AppRoutes, AppRouteProps> = {
 		element: <LazyRegisterPage />,
 	},
 	[AppRoutes.PROJECT]: {
-		path: getRouteProjectPage(":id"),
+		path: getRouteSpacePage(":project_id", ":space_id"),
 		element: <LazyProjectPage />,
 	},
 };

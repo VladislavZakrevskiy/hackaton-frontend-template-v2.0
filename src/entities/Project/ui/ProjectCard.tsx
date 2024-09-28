@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { getRandomNumber } from "@/shared/lib/helpers/getRandomNumber";
 import { Project } from "../model/types/GetProjectDto";
 import { useNavigate } from "react-router-dom";
-import { getRouteProjectPage } from "@/shared/consts/router";
+import { getRouteSpacePage } from "@/shared/consts/router";
 
 interface ProjectProps {
 	project: Project;
@@ -35,7 +35,7 @@ export const ProjectCard = ({ project }: ProjectProps) => {
 	const nav = useNavigate();
 
 	return (
-		<Card sx={{ bgcolor: theme.palette.grey[400], borderRadius: 4, width: "30%" }}>
+		<Card sx={{ bgcolor: theme.palette.grey[400], borderRadius: 4, width: "100%" }}>
 			<SpaceMedia img={project.image} name={project.name} />
 			<CardContent>
 				<Typography gutterBottom variant="h5" component="div">
@@ -46,7 +46,7 @@ export const ProjectCard = ({ project }: ProjectProps) => {
 				</Typography>
 			</CardContent>
 			<CardActions>
-				<Button onClick={() => nav(getRouteProjectPage(project.id))} size="small">
+				<Button onClick={() => nav(getRouteSpacePage(project.id, project.spaces[0].id))} size="small">
 					{t("open")}
 				</Button>
 				<Button size="small">{t("delete")}</Button>

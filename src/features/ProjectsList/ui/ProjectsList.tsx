@@ -72,6 +72,7 @@ export const ProjectsList: FC<ProjectsListProps> = ({ isShort }) => {
 				p: 2,
 				boxShadow: `3px 3px 0 2px ${theme.palette.text.primary}`,
 				gap: 3,
+				width: "100%",
 			}}
 		>
 			<Typography variant="h6">{t("projects")}</Typography>

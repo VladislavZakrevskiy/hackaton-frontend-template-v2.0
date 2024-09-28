@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
-import { Paper, Typography, Box, List, ListItem } from "@mui/material";
-import { Task, TaskCard } from "@/entities/Task";
+import { Paper, Typography, Box, List, ListItem, TextField, IconButton } from "@mui/material";
+import { Task, TaskCard, useCreateTaskMutation } from "@/entities/Task";
 import { Add } from "@mui/icons-material";
+import { useAppSelector } from "@/shared/lib/hooks";
+import { useProjectActions } from "@/entities/Project/model/slices/ProjectSlice";
 
 interface TaskColumnProps {
 	columnId: number;
@@ -10,45 +12,28 @@ interface TaskColumnProps {
 	taskIds: number[];
 	tasks: Task[];
 	columnWidth: number;
-	// onColumnResize: (newWidth: number) => void;
 }
 
-export const TaskColumn: React.FC<TaskColumnProps> = ({
-	columnId,
-	title,
-	taskIds,
-	tasks,
-	columnWidth,
-	// onColumnResize,
-}) => {
-	// useEffect(() => {
-	// const handleMouseMove = (event: MouseEvent) => {
-	// onColumnResize(event.clientX);
-	// 	};
+export const TaskColumn: React.FC<TaskColumnProps> = ({ columnId, title, taskIds, tasks, columnWidth }) => {
+	const { project, current_space } = useAppSelector((state) => state.project);
+	const [name, setName] = useState<string>("");
+	const [createTaskDB] = useCreateTaskMutation();
+	const { addTask } = useProjectActions();
 
-	// 	const handleMouseUp = () => {
-	// 		window.removeEventListener("mousemove", handleMouseMove);
-	// 		window.removeEventListener("mouseup", handleMouseUp);
-	// 	};
-
-	// 	const handleMouseDown = () => {
-	// 		window.addEventListener("mousemove", handleMouseMove);
-	// 		window.addEventListener("mouseup", handleMouseUp);
-	// 	};
-
-	// 	const resizer = document.getElementById(`resizer-${columnId}`);
-	// 	if (resizer) {
-	// 		resizer.addEventListener("mousedown", handleMouseDown);
-	// 	}
-
-	// 	return () => {
-	// 		if (resizer) {
-	// 			resizer.removeEventListener("mousedown", handleMouseDown);
-	// 		}
-	// 		window.removeEventListener("mousemove", handleMouseMove);
-	// 		window.removeEventListener("mouseup", handleMouseUp);
-	// 	};
-	// }, [columnId]);
+	const createTask = async () => {
+		const task = await createTaskDB({
+			description: "",
+			name,
+			project_id: project?.id || 0,
+			space_id: current_space?.id || 0,
+			status_id: columnId,
+		}).unwrap();
+		addTask({
+			...task,
+			status_id: columnId,
+			space_id: current_space?.id || 0,
+		});
+	};
 	return (
 		<Paper
 			sx={{
@@ -61,12 +46,10 @@ export const TaskColumn: React.FC<TaskColumnProps> = ({
 				padding: 2,
 			}}
 		>
-			{/* Заголовок столбца */}
 			<Typography variant="h6" sx={{ marginBottom: 2 }}>
 				{title}
 			</Typography>
 
-			{/* Область для задач */}
 			<Droppable droppableId={String(columnId)}>
 				{(provided, snapshot) => (
 					<Box
@@ -89,12 +72,15 @@ export const TaskColumn: React.FC<TaskColumnProps> = ({
 									display: "flex",
 									justifyContent: "center",
 									alignItems: "center",
-
+									flexDirection: "column",
 									backgroundColor: "background.default",
 									borderRadius: 1,
 								}}
 							>
-								<Add fontSize="large" />
+								<TextField value={name} onChange={(e) => setName(e.target.value)} />
+								<IconButton onClick={createTask}>
+									<Add fontSize="large" />
+								</IconButton>
 							</ListItem>
 							{taskIds.map((taskId, index) => {
 								const task = tasks.find((t) => t.id === taskId);

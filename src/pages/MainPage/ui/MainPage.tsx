@@ -9,9 +9,7 @@ const MainPage = memo(() => {
 
 	return (
 		<Paper className="flex-grow p-3 grid grid-rows-2 grid-cols-2 gap-4" sx={{ bgcolor: theme.palette.grey[400] }}>
-			<div className="overflow-y-hidden">
-				<ProjectsList />
-			</div>
+			<ProjectsList />
 			<LastTasksList />
 			<div className="col-span-2 w-full p-2">
 				<TaskCharts />

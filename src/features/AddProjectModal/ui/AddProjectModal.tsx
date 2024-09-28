@@ -1,7 +1,7 @@
 import { useModalManagerActions } from "@/app/managers/ModalManager/ModalManager";
 import { useCreateProjectMutation } from "@/entities/Project";
-import { useCreateSpaceMutation } from "@/entities/Space";
-import { getRouteProjectPage } from "@/shared/consts/router";
+import { useAddUserToSpaceMutation, useCreateSpaceMutation } from "@/entities/Space";
+import { getRouteSpacePage } from "@/shared/consts/router";
 import { useAppSelector } from "@/shared/lib/hooks";
 import { Button, Modal, Paper, TextField, Typography } from "@mui/material";
 import { useEffect } from "react";
@@ -17,10 +17,12 @@ interface AddProjectFormData {
 
 export const AddProjectModal = () => {
 	const { currentModal, modals } = useAppSelector((state) => state.modalManager);
+	const { authData } = useAppSelector((state) => state.user);
 	const { setIsOpen } = useModalManagerActions();
 	const { t } = useTranslation();
 	const [createProject, { isSuccess, data }] = useCreateProjectMutation();
-	const [createSpace] = useCreateSpaceMutation();
+	const [createSpace, { data: space }] = useCreateSpaceMutation();
+	const [addUserToSpace] = useAddUserToSpaceMutation();
 	const nav = useNavigate();
 
 	const {
@@ -31,12 +33,17 @@ export const AddProjectModal = () => {
 
 	const onSubmit: SubmitHandler<AddProjectFormData> = async (data) => {
 		const { id } = await createProject({ name: data.name }).unwrap();
-		await createSpace({ project_id: id, description: data.space_desc, name: data.space_name });
+		const { id: space_id } = await createSpace({
+			project_id: id,
+			description: data.space_desc,
+			name: data.space_name,
+		}).unwrap();
+		await addUserToSpace({ project_id: id, space_id: space_id, usernameToBeAdded: authData?.id || 0 });
 	};
 
 	useEffect(() => {
 		if (isSuccess) {
-			nav(getRouteProjectPage(data.id));
+			nav(getRouteSpacePage(data.id, space?.id || 0));
 		}
 	}, [isSuccess]);
 

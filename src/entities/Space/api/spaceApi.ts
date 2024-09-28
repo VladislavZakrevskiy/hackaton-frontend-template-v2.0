@@ -23,7 +23,7 @@ const userApi = rtkApi.injectEndpoints({
 			}),
 		}),
 
-		addUserToSpace: build.mutation<Space, UrlProps & { usernameToBeAdded: string }>({
+		addUserToSpace: build.mutation<Space, UrlProps & { usernameToBeAdded: number }>({
 			query: ({ project_id, space_id, usernameToBeAdded }) => ({
 				url: `/project/${project_id}/space/${space_id}?usernameToBeAdded=${usernameToBeAdded}`,
 				method: "POST",

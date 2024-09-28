@@ -22,15 +22,10 @@ const ProjectSlice = buildSlice({
 		// STUPID CRUD!!!!!!!!
 		addTask: (store, action: PayloadAction<Task & { space_id: number; status_id: number }>) => {
 			const { space_id, status_id, ...task } = action.payload;
-			const space_index = store.project?.spaces.findIndex(({ id }) => id === space_id);
-			if (space_index && store.project?.spaces?.[space_index]) {
-				for (let i = 0; i < store.project?.spaces?.[space_index].statuses.length; i++) {
-					const status = store.project?.spaces?.[space_index].statuses[i];
-					if (status.id === status_id) {
-						store.project?.spaces?.[space_index].statuses[i].tasks.push(task);
-					}
-				}
-			}
+			const space_index = store.project?.spaces.findIndex(({ id }) => id == space_id);
+			const status_index = store.project?.spaces?.[space_index!].statuses.findIndex(({ id }) => id == status_id);
+			console.log(space_index, status_index);
+			store.project?.spaces?.[space_index!].statuses[status_index!].tasks.push(task);
 		},
 		addStatus: (store, action: PayloadAction<{ space_id: number } & Status>) => {
 			if (store.project?.spaces) {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 import { Box, CircularProgress, IconButton, TextField } from "@mui/material";
 import { TaskColumn } from "@/features/TaskColumn";
@@ -17,11 +17,6 @@ interface TaskBoardProps {
 export const TaskBoard: React.FC<TaskBoardProps> = ({ columns: initialColumns, tasks }) => {
 	const { t } = useTranslation();
 	const [columns, setColumns] = useState(initialColumns);
-	// const [columnWidth, setColumnWidth] = useState<number>(Number(localStorage.getItem(COLUMN_WIDTH)) ?? 200);
-	// const saveWidthToLocalStorage = debounce((width: number) => {
-	// 	localStorage.setItem(COLUMN_WIDTH, JSON.stringify(width));
-	// }, 300);
-
 	const [name, setName] = useState<string>("");
 	const { project, current_space } = useAppSelector((state) => state.project);
 	const { addStatus } = useProjectActions();
@@ -36,18 +31,39 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({ columns: initialColumns, t
 		addStatus({ ...addedSpace, space_id: current_space?.id || 0 });
 	};
 
-	// const handleColumnResize = (newWidth: number) => {
-	// setColumnWidth(newWidth);
-	// saveWidthToLocalStorage(newWidth);
-	// };
+	useEffect(() => {
+		setColumns(initialColumns);
+	}, [initialColumns]);
+
+	// Ограничение перетаскивания на 50px
+	const checkWithinBounds = (result: DropResult): boolean => {
+		const { destination } = result;
+		if (!destination) return false;
+
+		// Рассчитаем текущее положение задачи
+		const destinationIndex = destination.index;
+		const columnElement = document.getElementById(destination.droppableId);
+		if (columnElement) {
+			const rect = columnElement.getBoundingClientRect();
+			const columnHeight = rect.height;
+			const taskHeight = 50; // Допустим высота задачи - 50px
+
+			// Проверяем, находится ли задача на границе колонки
+			if (columnHeight - taskHeight * destinationIndex <= 200) {
+				// Если попадает в последние 50px, возвращаем false, чтобы отменить перемещение
+				return false;
+			}
+		}
+		return true;
+	};
 
 	const onDragEnd = (result: DropResult) => {
-		const { destination, source, type } = result;
+		const { source, destination, type } = result;
 
-		// Если нет destination (за пределы допустимого), ничего не делаем
-		if (!destination) return;
+		// Проверка на корректность перемещения
+		if (!destination || !checkWithinBounds(result)) return;
 
-		// Если элемент был перемещен в то же место
+		// Если элемент перетаскивают на то же место
 		if (destination.droppableId === source.droppableId && destination.index === source.index) {
 			return;
 		}
@@ -62,40 +78,40 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({ columns: initialColumns, t
 			return;
 		}
 
-		// Перетаскивание задач между столбцами
+		// Перетаскивание задач
 		const startColumn = columns.find((col) => col.id === Number(source.droppableId));
 		const endColumn = columns.find((col) => col.id === Number(destination.droppableId));
 
 		if (!startColumn || !endColumn) return;
 
-		// Перемещение задачи в пределах одного столбца
+		// Перетаскивание внутри одной колонки
 		if (startColumn === endColumn) {
-			const newTaskIds = Array.from(startColumn.tasks.map(({ id }) => id));
-			const [movedTask] = newTaskIds.splice(source.index, 1);
-			newTaskIds.splice(destination.index, 0, movedTask);
+			const newTaskOrder = Array.from(startColumn.tasks);
+			const [movedTask] = newTaskOrder.splice(source.index, 1);
+			newTaskOrder.splice(destination.index, 0, movedTask);
 
 			const newColumn = {
 				...startColumn,
-				taskIds: newTaskIds,
+				tasks: newTaskOrder,
 			};
 
 			setColumns((prev) => prev.map((col) => (col.id === newColumn.id ? newColumn : col)));
 			return;
 		}
 
-		// Перемещение задачи в другой столбец
-		const startTaskIds = Array.from(startColumn.tasks.map(({ id }) => id));
-		const [movedTask] = startTaskIds.splice(source.index, 1);
+		// Перемещение задачи в другую колонку
+		const startTaskOrder = Array.from(startColumn.tasks);
+		const [movedTask] = startTaskOrder.splice(source.index, 1);
 		const newStartColumn = {
 			...startColumn,
-			taskIds: startTaskIds,
+			tasks: startTaskOrder,
 		};
 
-		const endTaskIds = Array.from(endColumn.tasks.map(({ id }) => id));
-		endTaskIds.splice(destination.index, 0, movedTask);
+		const endTaskOrder = Array.from(endColumn.tasks);
+		endTaskOrder.splice(destination.index, 0, movedTask);
 		const newEndColumn = {
 			...endColumn,
-			taskIds: endTaskIds,
+			tasks: endTaskOrder,
 		};
 
 		setColumns((prev) =>
@@ -153,7 +169,6 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({ columns: initialColumns, t
 												title={column.name}
 												tasks={tasks.filter((task) => column.tasks.map(({ id }) => id).includes(task.id))}
 												columnWidth={200}
-												// onColumnResize={handleColumnResize}
 											/>
 										</div>
 									)}
