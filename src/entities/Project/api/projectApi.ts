@@ -16,8 +16,11 @@ const projectApi = rtkApi.injectEndpoints({
 			query: (data) => ({ url: `/project`, body: data, method: "POST" }),
 		}),
 
-		deleteProject: build.mutation<Project, string>({
-			query: (project_id) => ({ url: `/project/${project_id}`, method: "DELETE" }),
+		deleteProject: build.mutation<Project, { project_id: number; usernameToBeAdded: string }>({
+			query: ({ project_id, usernameToBeAdded }) => ({
+				url: `/project/${project_id}?usernameToBeAdded=${usernameToBeAdded}`,
+				method: "POST",
+			}),
 		}),
 	}),
 });

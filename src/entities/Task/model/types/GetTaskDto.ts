@@ -5,4 +5,5 @@ export interface Task {
 	title: string;
 	owner: User;
 	executor: User;
+	status: string;
 }

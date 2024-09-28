@@ -6,18 +6,17 @@ import { $api } from "@/shared/api/api";
 import { rtkApi } from "@/shared/api/rtkApi";
 import { ThemeReducer } from "../../ThemeProvider";
 import { SidebarReducer } from "@/widgets/SideBar";
-// import { NavigateOptions, To } from 'react-router-dom'
+import { ModalManagerReducer } from "@/app/managers/ModalManager/ModalManager";
+import { ProjectReducer } from "@/entities/Project";
 
-export const createReduxStore = (
-	initaialState?: StateSchema,
-	asyncReducers?: ReducersMapObject<StateSchema>,
-	// nav?: (to: To, options?: NavigateOptions) => void
-) => {
+export const createReduxStore = (initaialState?: StateSchema, asyncReducers?: ReducersMapObject<StateSchema>) => {
 	const rootReducers: ReducersMapObject<StateSchema> = {
 		...asyncReducers,
 		user: UserReducer,
 		theme: ThemeReducer,
 		sidebar: SidebarReducer,
+		project: ProjectReducer,
+		modalManager: ModalManagerReducer,
 		[rtkApi.reducerPath]: rtkApi.reducer,
 	};
 
@@ -31,7 +30,7 @@ export const createReduxStore = (
 		middleware: (getDefaultMiddleware) =>
 			getDefaultMiddleware({
 				thunk: {
-					extraArgument: { api: $api /* nav */ },
+					extraArgument: { api: $api },
 				},
 			}).concat(rtkApi.middleware),
 	});

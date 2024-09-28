@@ -1,29 +1,57 @@
-import React from "react";
-import { Drawer, Toolbar, Typography, Divider, useTheme } from "@mui/material";
-import { useAppSelector } from "@/shared/lib/hooks";
-import { useSidebarActions } from "../model/SidebarSlice";
-import { useTranslation } from "react-i18next";
+import React, { useState } from "react";
+import { Box, useTheme } from "@mui/material";
+import { ChevronRight, ChevronLeft } from "@mui/icons-material";
+import { SpaceList } from "@/features/SpacesList";
+import { ProjectsList } from "@/features/ProjectsList";
 
 export const Sidebar: React.FC = () => {
-	const { isOpen } = useAppSelector((state) => state.sidebar);
-	const { setIsOpen } = useSidebarActions();
-	const { t } = useTranslation();
 	const theme = useTheme();
+	const [isOpen, setIsOpen] = useState(true);
+
+	const toggleSidebar = () => {
+		setIsOpen((prev) => !prev);
+	};
 
 	return (
-		<Drawer open={isOpen} onClose={() => setIsOpen(false)} anchor="left">
-			<Toolbar />
+		<Box
+			sx={{
+				width: isOpen ? 240 : 20,
+				minWidth: isOpen ? 240 : 20,
+				minHeight: "100vh",
+				transition: "width 0.3s ease",
+				overflow: "visible",
+				backgroundColor: theme.palette.primary.main,
+				position: "relative",
+			}}
+		>
+			{isOpen && (
+				<Box component={"div"} className="flex flex-col items-center gap-5" sx={{ padding: "20px" }}>
+					<ProjectsList isShort />
+					<SpaceList />
+				</Box>
+			)}
 
-			<Divider sx={{ backgroundColor: theme.palette.text.primary, marginY: "10px" }} />
-
-			<div className="flex justify-center items-center flex-col gap-1 pt-3">
-				<Typography align="center" sx={{ color: theme.palette.text.secondary, fontStyle: "italic" }}>
-					{t("pytivetka")}
-				</Typography>
-				<Typography align="center" sx={{ color: theme.palette.text.secondary, fontStyle: "italic" }}>
-					{t("for front")}
-				</Typography>
-			</div>
-		</Drawer>
+			<Box
+				sx={{
+					position: "absolute",
+					top: "60vh",
+					bottom: "auto",
+					left: isOpen ? "200px" : "-5px",
+					width: "60px",
+					transition: "left 0.3s ease",
+					height: "60px",
+					cursor: "pointer",
+					borderRadius: 9999,
+					backgroundColor: theme.palette.primary.main,
+					display: "flex",
+					justifyContent: "center",
+					alignItems: "center",
+					color: "white",
+				}}
+				onClick={toggleSidebar}
+			>
+				{isOpen ? <ChevronLeft /> : <ChevronRight />}
+			</Box>
+		</Box>
 	);
 };

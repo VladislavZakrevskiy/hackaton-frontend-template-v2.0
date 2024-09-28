@@ -8,6 +8,9 @@ export const rtkApi = createApi({
 		prepareHeaders: (headers, { endpoint }) => {
 			const token = localStorage.getItem(USER_ACCESS_TOKEN) || "";
 			console.log(endpoint);
+			if (endpoint === "register" || endpoint === "signIn" || endpoint === 'refresh') {
+				return headers;
+			}
 			if (token) {
 				headers.set("Authorization", "Bearer " + token);
 			}

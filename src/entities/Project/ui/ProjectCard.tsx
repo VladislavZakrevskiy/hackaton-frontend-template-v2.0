@@ -1,7 +1,9 @@
-import { Button, Card, CardActions, CardContent, CardMedia, Paper, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, CardMedia, Paper, Typography, useTheme } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { getRandomNumber } from "@/shared/lib/helpers/getRandomNumber";
 import { Project } from "../model/types/GetProjectDto";
+import { useNavigate } from "react-router-dom";
+import { getRouteProjectPage } from "@/shared/consts/router";
 
 interface ProjectProps {
 	project: Project;
@@ -20,6 +22,7 @@ const SpaceMedia = ({ img, name }: { img: string; name: string }) => {
 				height: 140,
 				borderRadius: 3,
 			}}
+			className="flex justify-center items-center"
 		>
 			{name}
 		</Paper>
@@ -28,9 +31,11 @@ const SpaceMedia = ({ img, name }: { img: string; name: string }) => {
 
 export const ProjectCard = ({ project }: ProjectProps) => {
 	const { t } = useTranslation();
+	const theme = useTheme();
+	const nav = useNavigate();
 
 	return (
-		<Card>
+		<Card sx={{ bgcolor: theme.palette.grey[400], borderRadius: 4 }}>
 			<SpaceMedia img={project.image} name={project.name} />
 			<CardContent>
 				<Typography gutterBottom variant="h5" component="div">
@@ -41,7 +46,9 @@ export const ProjectCard = ({ project }: ProjectProps) => {
 				</Typography>
 			</CardContent>
 			<CardActions>
-				<Button size="small">{t("open")}</Button>
+				<Button onClick={() => nav(getRouteProjectPage(project.id))} size="small">
+					{t("open")}
+				</Button>
 				<Button size="small">{t("delete")}</Button>
 			</CardActions>
 		</Card>

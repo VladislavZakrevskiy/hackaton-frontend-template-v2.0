@@ -2,7 +2,7 @@ import { Space } from "@/entities/Space";
 import { User } from "@/entities/User";
 
 export interface Project {
-	id: number;
+	id: string;
 	name: string;
 	description: string
 	owner: User;

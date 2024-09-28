@@ -14,8 +14,6 @@ export const AuthMiddleware: React.FC<{ children: React.ReactNode }> = ({ childr
 	const [getMe] = useLazyGetMeQuery();
 	const { pathname } = useLocation();
 
-	console.log(pathname);
-
 	useEffect(() => {
 		const checkAuth = async () => {
 			if ([getRouteLogin(), getRouteRegister()].includes(pathname)) {
@@ -28,6 +26,7 @@ export const AuthMiddleware: React.FC<{ children: React.ReactNode }> = ({ childr
 			if (refresh_token) {
 				try {
 					const { data, isError } = await refresh();
+					console.log(data);
 					if (isError || data === undefined) {
 						navigate(getRouteLogin());
 						return;
@@ -35,7 +34,9 @@ export const AuthMiddleware: React.FC<{ children: React.ReactNode }> = ({ childr
 					localStorage.setItem(USER_REFRESH_TOKEN, data.refreshToken);
 					localStorage.setItem(USER_ACCESS_TOKEN, data.accessToken);
 					const { data: user } = await getMe();
+					console.log("1", user);
 					if (user) {
+						console.log("2", user);
 						setAuthData(user);
 					}
 				} catch (error) {

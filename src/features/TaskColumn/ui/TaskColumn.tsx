@@ -1,43 +1,109 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Droppable } from "react-beautiful-dnd";
-import { Typography } from "@mui/material";
+import { Paper, Typography, Box, List } from "@mui/material";
 import { Task, TaskCard } from "@/entities/Task";
 
-interface ColumnProps {
-	column: {
-		title: string;
-		taskIds: string[];
-	};
-	tasks: {
-		[key: string]: Task;
-	};
+interface TaskColumnProps {
+	columnId: number;
+	title: string;
+	taskIds: number[];
+	tasks: Task[];
+	columnWidth: number;
+	onColumnResize: (newWidth: number) => void;
 }
 
-const Column: React.FC<ColumnProps> = ({ column, tasks }) => {
+export const TaskColumn: React.FC<TaskColumnProps> = ({
+	columnId,
+	title,
+	taskIds,
+	tasks,
+	columnWidth,
+	onColumnResize,
+}) => {
+	useEffect(() => {
+		const handleMouseMove = (event: MouseEvent) => {
+			onColumnResize(event.clientX);
+		};
+
+		const handleMouseUp = () => {
+			window.removeEventListener("mousemove", handleMouseMove);
+			window.removeEventListener("mouseup", handleMouseUp);
+		};
+
+		const handleMouseDown = () => {
+			window.addEventListener("mousemove", handleMouseMove);
+			window.addEventListener("mouseup", handleMouseUp);
+		};
+
+		const resizer = document.getElementById(`resizer-${columnId}`);
+		if (resizer) {
+			resizer.addEventListener("mousedown", handleMouseDown);
+		}
+
+		return () => {
+			if (resizer) {
+				resizer.removeEventListener("mousedown", handleMouseDown);
+			}
+			window.removeEventListener("mousemove", handleMouseMove);
+			window.removeEventListener("mouseup", handleMouseUp);
+		};
+	}, [columnId]);
 	return (
-		<Droppable droppableId={column.title}>
-			{(provided) => (
-				<div
-					ref={provided.innerRef}
-					{...provided.droppableProps}
-					style={{
-						border: "1px solid gray",
-						borderRadius: "4px",
-						padding: "8px",
-						backgroundColor: "white",
-						minHeight: "100px",
-					}}
-				>
-					<Typography variant="h6">{column.title}</Typography>
-					{column.taskIds.map((taskId, index) => {
-						const task = tasks[taskId];
-						return <TaskCard key={task.id} task={task} index={index} />;
-					})}
-					{provided.placeholder}
-				</div>
-			)}
-		</Droppable>
+		<Paper
+			sx={{
+				width: columnWidth,
+				height: "100%",
+				display: "flex",
+				flexDirection: "column",
+				backgroundColor: "background.paper",
+				color: "text.primary",
+				padding: 2,
+			}}
+		>
+			{/* Заголовок столбца */}
+			<Typography variant="h6" sx={{ marginBottom: 2 }}>
+				{title}
+			</Typography>
+
+			{/* Область для задач */}
+			<Droppable droppableId={String(columnId)}>
+				{(provided, snapshot) => (
+					<Box
+						ref={provided.innerRef}
+						{...provided.droppableProps}
+						sx={{
+							flexGrow: 1,
+							minHeight: 100,
+							backgroundColor: snapshot.isDraggingOver ? "primary.light" : "",
+							padding: 1,
+							borderRadius: 1,
+							transition: "background-color 0.2s ease",
+						}}
+					>
+						<List sx={{ minHeight: "100%" }}>
+							{taskIds.map((taskId, index) => {
+								const task = tasks.find((t) => t.id === taskId);
+								return task ? (
+									<TaskCard key={task.id} task={task} taskId={task.id} index={index} title={task.title} />
+								) : null;
+							})}
+							<div
+								id={`resizer-${columnId}`}
+								style={{
+									width: "5px",
+									cursor: "ew-resize",
+									backgroundColor: "transparent",
+									height: "100%",
+									position: "absolute",
+									right: 0,
+									top: 0,
+								}}
+							/>
+							{provided.placeholder}
+						</List>
+					</Box>
+				)}
+			</Droppable>
+		</Paper>
 	);
 };
-
-export default Column;

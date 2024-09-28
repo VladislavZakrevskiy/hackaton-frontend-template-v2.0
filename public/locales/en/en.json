@@ -22,5 +22,18 @@
   "sovet proj": "Soviet Project",
   "new proj": "New perception",
   "fullName": "FIO",
-  "fullNameRequired": "FIO is required"
+  "fullNameRequired": "FIO is required",
+  "no projects": "There are no productions! Open up! The country needs steam locomotives! The country needs metal!",
+  "space": "Workspace",
+  "spaces": "Workspaces",
+  "project": "Acceptance",
+  "projects": "Acceptances",
+  "no spaces": "No workspaces",
+  "last tasks": "Last Tasks",
+  "no tasks": "Today is a day off! There are no tasks! Comrade, you have a chance to go to a sanatorium!",
+  "create project": "Create Project",
+  "nameRequired": "Name is required",
+  "name": "Name",
+  "open": "Open",
+  "delete": "Delete"
 }

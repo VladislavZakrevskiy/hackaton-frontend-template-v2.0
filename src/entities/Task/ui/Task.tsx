@@ -1,28 +1,32 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { Card as MCard, Typography } from "@mui/material";
-import { Task as TaskType } from "../model/types/GetTaskDto";
+import { ListItem } from "@mui/material";
+import { TaskContent } from "./TaskContent";
+import { Task } from "../model/types/GetTaskDto";
 
-interface CardProps {
-	task: TaskType;
+interface TaskCardProps {
+	taskId: number;
 	index: number;
+	title: string;
+	task: Task;
 }
 
-export const TaskCard: React.FC<CardProps> = ({ task, index }) => {
+export const TaskCard: React.FC<TaskCardProps> = ({ taskId, index, task }) => {
 	return (
-		<Draggable key={task.id} draggableId={String(task.id)} index={index}>
+		<Draggable draggableId={String(taskId)} index={index}>
 			{(provided) => (
-				<MCard
+				<ListItem
 					ref={provided.innerRef}
 					{...provided.draggableProps}
 					{...provided.dragHandleProps}
-					style={{
-						...provided.draggableProps.style,
-						margin: "4px 0",
+					sx={{
+						marginBottom: 1,
+						backgroundColor: "background.default",
+						borderRadius: 1,
 					}}
 				>
-					<Typography>{task.title}</Typography>
-				</MCard>
+					<TaskContent task={task} />
+				</ListItem>
 			)}
 		</Draggable>
 	);

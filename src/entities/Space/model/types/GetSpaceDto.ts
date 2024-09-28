@@ -1,4 +1,4 @@
-import { Task } from "@/entities/Task";
+import { Status } from "@/entities/Status";
 import { User } from "@/entities/User";
 
 export interface Space {
@@ -7,5 +7,7 @@ export interface Space {
 	description: string;
 	owner: User;
 	members: User[];
-	tasks: Task[];
+	statuses: Status[]
+	// tasks: Task[];
+
 }
