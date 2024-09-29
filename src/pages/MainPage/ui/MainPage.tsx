@@ -8,7 +8,10 @@ const MainPage = memo(() => {
 	const theme = useTheme();
 
 	return (
-		<Paper className="flex-grow p-3 grid grid-rows-2 grid-cols-2 gap-4" sx={{ bgcolor: theme.palette.grey[400] }}>
+		<Paper
+			className="flex-grow p-3 grid grid-rows-2 grid-cols-2 gap-4  max-h-[150vh] min-h-screen"
+			sx={{ bgcolor: theme.palette.grey[400] }}
+		>
 			<ProjectsList />
 			<LastTasksList />
 			<div className="col-span-2 w-full p-2">

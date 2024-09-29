@@ -29,8 +29,22 @@ const userApi = rtkApi.injectEndpoints({
 				method: "POST",
 			}),
 		}),
+
+		deleteSpace: build.mutation<Space, { space_id: number }>({
+			query: ({ space_id }) => ({ url: `/project/space/${space_id}`, method: "DELETE" }),
+		}),
+
+		updateSpace: build.mutation<Space, Partial<Space>>({
+			query: (updatedSpace) => ({ url: `/project/space/${updatedSpace.id}`, body: updatedSpace, method: "PUT" }),
+		}),
 	}),
 });
 
-export const { useCreateSpaceMutation, useGetSpaceByIdQuery, useAddUserToSpaceMutation, useGetProjectSpacesQuery } =
-	userApi;
+export const {
+	useCreateSpaceMutation,
+	useGetSpaceByIdQuery,
+	useAddUserToSpaceMutation,
+	useGetProjectSpacesQuery,
+	useDeleteSpaceMutation,
+	useUpdateSpaceMutation,
+} = userApi;

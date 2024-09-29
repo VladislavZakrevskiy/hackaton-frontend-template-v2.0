@@ -8,5 +8,5 @@ export interface Project {
 	owner: User;
 	members: User[];
 	spaces: Space[];
-	image: string;
+	image: string[];
 }

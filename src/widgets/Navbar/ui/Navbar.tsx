@@ -18,7 +18,7 @@ export const Navbar: React.FC = () => {
 		<AppBar position="static" sx={{ backgroundColor: theme.palette.primary.main }}>
 			<Toolbar sx={{ backgroundColor: theme.palette.primary.main }}>
 				<Link style={{ flexGrow: 1 }} to={getRouteMain()}>
-					<Typography variant="h6">{t("sovet proj")}</Typography>
+					<Typography variant="h6">{t("project")}</Typography>
 				</Link>
 
 				<div className="flex items-center justify-around gap-2">

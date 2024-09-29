@@ -16,7 +16,14 @@ const userApi = rtkApi.injectEndpoints({
 				body: { name },
 			}),
 		}),
+
+		deleteStatus: build.mutation<Status, { status_id: number }>({
+			query: ({ status_id }) => ({
+				url: `/project/status/${status_id}`,
+				method: "DELETE",
+			}),
+		}),
 	}),
 });
 
-export const { useCreateStatusMutation } = userApi;
+export const { useCreateStatusMutation, useDeleteStatusMutation } = userApi;

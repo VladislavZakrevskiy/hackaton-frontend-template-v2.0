@@ -1,9 +1,10 @@
 import { useProjectActions } from "@/entities/Project/model/slices/ProjectSlice";
-import { useCreateSpaceMutation, useGetProjectSpacesQuery } from "@/entities/Space";
+import { useCreateSpaceMutation, useDeleteSpaceMutation, useGetProjectSpacesQuery } from "@/entities/Space";
 import { getRouteSpacePage } from "@/shared/consts/router";
 import { useAppSelector } from "@/shared/lib/hooks";
-import { Add } from "@mui/icons-material";
+import { Add, Delete } from "@mui/icons-material";
 import {
+	Button,
 	CircularProgress,
 	IconButton,
 	List,
@@ -20,16 +21,24 @@ import { Link } from "react-router-dom";
 
 export const SpaceList = () => {
 	const [name, setName] = useState<string>("");
+	const { setCurrentSpace } = useProjectActions();
 	const { project } = useAppSelector((state) => state.project);
 	const { isLoading, data } = useGetProjectSpacesQuery({ project_id: project?.id || 1 });
 	const { t } = useTranslation();
 	const theme = useTheme();
 	const [createSpaceDB] = useCreateSpaceMutation();
-	const { addSpace } = useProjectActions();
+	const [deleteSpaceDB] = useDeleteSpaceMutation();
+
+	const { addSpace, removeSpace } = useProjectActions();
 
 	const createSpace = async () => {
 		const space = await createSpaceDB({ description: "", name: name, project_id: project?.id || 0 }).unwrap();
 		addSpace({ ...space });
+	};
+
+	const deleteSpace = async (space_id: number) => {
+		await deleteSpaceDB({ space_id });
+		removeSpace({ space_id });
 	};
 
 	if (isLoading) {
@@ -76,15 +85,22 @@ export const SpaceList = () => {
 		>
 			<ListItem className="flex flex-col justify-center items-center gap-1">
 				<TextField value={name} onChange={(e) => setName(e.target.value)} label="Название цеха" />
-				<IconButton onClick={createSpace}>
-					<Add />
-				</IconButton>
+				<Button color="inherit" variant="text" startIcon={<Add />} onClick={createSpace}>
+					{t("add")}
+				</Button>
 			</ListItem>
-			{data?.map((space) => (
-				<ListItem>
-					<Link to={getRouteSpacePage(project?.id || 0, space.id)}>{space.name}</Link>
-				</ListItem>
-			))}
+			<div className="flex flex-col justify-center items-center">
+				{data?.map((space) => (
+					<ListItem key={space.id} className="flex justify-center items-center gap-2">
+						<Link onClick={() => setCurrentSpace(space)} to={getRouteSpacePage(project?.id || 0, space.id)}>
+							{space.name}
+						</Link>
+						<IconButton onClick={() => deleteSpace(space.id)}>
+							<Delete />
+						</IconButton>
+					</ListItem>
+				))}
+			</div>
 		</List>
 	);
 };

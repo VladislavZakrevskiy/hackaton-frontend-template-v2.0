@@ -4,9 +4,12 @@ import { getRandomNumber } from "@/shared/lib/helpers/getRandomNumber";
 import { Project } from "../model/types/GetProjectDto";
 import { useNavigate } from "react-router-dom";
 import { getRouteSpacePage } from "@/shared/consts/router";
+import { useDeleteProjectMutation } from "../api/projectApi";
+import { Dispatch, SetStateAction } from "react";
 
 interface ProjectProps {
 	project: Project;
+	setProjects: Dispatch<SetStateAction<Project[]>>;
 }
 
 const SpaceMedia = ({ img, name }: { img: string; name: string }) => {
@@ -29,10 +32,16 @@ const SpaceMedia = ({ img, name }: { img: string; name: string }) => {
 	);
 };
 
-export const ProjectCard = ({ project }: ProjectProps) => {
+export const ProjectCard = ({ project, setProjects }: ProjectProps) => {
 	const { t } = useTranslation();
 	const theme = useTheme();
 	const nav = useNavigate();
+	const [deleteProjectDB] = useDeleteProjectMutation();
+
+	const deleteProject = async () => {
+		await deleteProjectDB({ project_id: project.id });
+		setProjects((prev) => prev.filter(({ id }) => id !== project.id));
+	};
 
 	return (
 		<Card sx={{ bgcolor: theme.palette.grey[400], borderRadius: 4, width: "100%" }}>
@@ -49,7 +58,9 @@ export const ProjectCard = ({ project }: ProjectProps) => {
 				<Button onClick={() => nav(getRouteSpacePage(project.id, project.spaces[0].id))} size="small">
 					{t("open")}
 				</Button>
-				<Button size="small">{t("delete")}</Button>
+				<Button onClick={deleteProject} size="small">
+					{t("delete")}
+				</Button>
 			</CardActions>
 		</Card>
 	);

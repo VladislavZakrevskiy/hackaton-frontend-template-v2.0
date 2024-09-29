@@ -24,7 +24,7 @@ export const LastTasksList = () => {
 				data?.map((task) => (
 					<ListItem>
 						<Link to={getRouteTaskPage(task.id)}>
-							{task.title} {`[${task.status}]`}
+							{task.title} {`[${task.status || t("no status")}]`}
 						</Link>
 					</ListItem>
 				))

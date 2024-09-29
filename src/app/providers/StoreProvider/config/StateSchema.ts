@@ -7,6 +7,7 @@ import { ThemeSchema } from "../../ThemeProvider";
 import { SidebarSchema } from "@/widgets/SideBar";
 import { ModalManagerSchema } from "@/app/managers/ModalManager/ModalManagerSchema";
 import { ProjectSchema } from "@/entities/Project";
+import { EditTaskModalSchema } from "@/features/EditTaskModal";
 
 export interface StateSchema {
 	user: UserSchema;
@@ -18,6 +19,7 @@ export interface StateSchema {
 
 	// Async reducers
 	// **here**
+	editTask?: EditTaskModalSchema
 }
 
 export type StateSchemaKey = keyof StateSchema;

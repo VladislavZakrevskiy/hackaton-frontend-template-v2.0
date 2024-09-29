@@ -40,5 +40,16 @@
   "spaceNameRequired": "Workspace name is required",
   "space_desc": "Workspace description",
   "spaceDescRequired": "Workspace description is required",
-  "status": "Status"
+  "status": "Status",
+  "add": "Add",
+  "edit": "Edit",
+  "edit task": "Editint Task",
+  "no status": "No status",
+  "no users": "No users",
+  "required": "Required",
+  "title": "Title",
+  "desc": "Description",
+  "created date": "Created date",
+  "deadline date": "Deadline",
+  "save": "Save"
 }

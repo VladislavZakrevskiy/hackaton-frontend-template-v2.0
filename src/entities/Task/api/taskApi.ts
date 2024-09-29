@@ -11,7 +11,11 @@ interface UrlProps {
 const userApi = rtkApi.injectEndpoints({
 	endpoints: (build) => ({
 		getMyTasks: build.query<Task[], void>({
-			query: () => `/tasks`,
+			query: () => `/project/task?limit=10`,
+		}),
+
+		uploadAvatar: build.mutation<Task, { formdata: FormData; task_id: number }>({
+			query: ({ formdata, task_id }) => ({ url: `/profile/task/${task_id}/upload`, body: formdata, method: "POST" }),
 		}),
 
 		getTasksByStatus: build.query<Task[], UrlProps>({
@@ -27,13 +31,24 @@ const userApi = rtkApi.injectEndpoints({
 			}),
 		}),
 
-		deleteTask: build.query<Task, UrlProps>({
-			query: ({ project_id, space_id, status_id }) => ({
-				url: `/project/${project_id}/space/${space_id}/status/${status_id}/task`,
+		deleteTask: build.query<Task, { task_id: number }>({
+			query: ({ task_id }) => ({
+				url: `/project/task/${task_id}`,
 				method: "DELETE",
 			}),
+		}),
+
+		updateTask: build.mutation<Task, Partial<Task>>({
+			query: (updatedTask) => ({ url: "/project/task/" + updatedTask.id, method: "PUT", body: updatedTask }),
 		}),
 	}),
 });
 
-export const { useCreateTaskMutation, useDeleteTaskQuery, useGetTasksByStatusQuery, useGetMyTasksQuery } = userApi;
+export const {
+	useCreateTaskMutation,
+	useUploadAvatarMutation,
+	useDeleteTaskQuery,
+	useGetTasksByStatusQuery,
+	useGetMyTasksQuery,
+	useUpdateTaskMutation,
+} = userApi;

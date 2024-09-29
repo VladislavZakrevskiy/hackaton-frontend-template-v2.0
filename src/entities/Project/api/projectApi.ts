@@ -12,18 +12,29 @@ const projectApi = rtkApi.injectEndpoints({
 			query: (project_id) => `/project/${project_id}`,
 		}),
 
+		uploadAvatar: build.mutation<Project, { formdata: FormData; project_id: number }>({
+			query: ({ formdata, project_id }) => ({ url: `/profile/${project_id}/upload`, body: formdata, method: "POST" }),
+		}),
+
 		createProject: build.mutation<Project, AddProjectDto>({
 			query: (data) => ({ url: `/project`, body: data, method: "POST" }),
 		}),
 
-		deleteProject: build.mutation<Project, { project_id: number; usernameToBeAdded: string }>({
-			query: ({ project_id, usernameToBeAdded }) => ({
-				url: `/project/${project_id}?usernameToBeAdded=${usernameToBeAdded}`,
-				method: "POST",
-			}),
+		deleteProject: build.mutation<Project, { project_id: number }>({
+			query: ({ project_id }) => ({ url: `/project/${project_id}`, method: "DELETE" }),
+		}),
+
+		updateProject: build.mutation<Project, Partial<Project>>({
+			query: (updatedProject) => ({ url: `/project/${updatedProject.id}`, body: updatedProject, method: "PUT" }),
 		}),
 	}),
 });
 
-export const { useCreateProjectMutation, useDeleteProjectMutation, useGetProjectByIdQuery, useGetProjectsQuery } =
-	projectApi;
+export const {
+	useCreateProjectMutation,
+	useDeleteProjectMutation,
+	useGetProjectByIdQuery,
+	useUploadAvatarMutation,
+	useGetProjectsQuery,
+	useUpdateProjectMutation,
+} = projectApi;

@@ -5,4 +5,5 @@ export {
 	useGetSpaceByIdQuery,
 	useAddUserToSpaceMutation,
 	useGetProjectSpacesQuery,
+	useDeleteSpaceMutation,
 } from "./api/spaceApi";

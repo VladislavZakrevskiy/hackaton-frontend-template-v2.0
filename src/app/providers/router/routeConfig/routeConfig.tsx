@@ -7,11 +7,13 @@ import {
 	getRouteNotFound,
 	getRouteRegister,
 	getRouteSpacePage,
+	getRouteUserPage,
 } from "@/shared/consts/router";
 import { AppRouteProps } from "@/shared/types/router";
 import { LazyLoginPage } from "@/pages/Login";
 import { LazyRegisterPage } from "@/pages/Register";
 import { LazyProjectPage } from "@/pages/ProjectPage";
+import { LazyUserPage } from "@/pages/User";
 
 export const routeConfig: Record<AppRoutes, AppRouteProps> = {
 	[AppRoutes.MAIN]: {
@@ -34,5 +36,10 @@ export const routeConfig: Record<AppRoutes, AppRouteProps> = {
 	[AppRoutes.PROJECT]: {
 		path: getRouteSpacePage(":project_id", ":space_id"),
 		element: <LazyProjectPage />,
+		authOnly: true,
+	},
+	[AppRoutes.USER]: {
+		path: getRouteUserPage(":id"),
+		element: <LazyUserPage />,
 	},
 };

@@ -30,11 +30,11 @@ const App = () => {
 	}
 
 	return (
-		<div className="flex flex-col h-screen">
+		<div className="flex flex-col h-screen max-w-screen">
 			<Suspense fallback={<PageLoader />}>
 				<Navbar />
 				<ModalManager />
-				<div className="flex">
+				<div className="flex  max-w-[100vw]">
 					<Sidebar />
 					<AppRouter />
 				</div>

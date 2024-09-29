@@ -73,6 +73,17 @@ const ProjectSlice = buildSlice({
 			}
 		},
 
+		removeStatus: (store, action: PayloadAction<{ status_id: number; space_id: number }>) => {
+			const { space_id, status_id } = action.payload;
+			const space_index = store.project?.spaces.findIndex(({ id }) => id === space_id);
+			if (space_index) {
+				// @ts-ignore
+				store.project!.spaces[space_index].statuses = store.project?.spaces[space_index].statuses.filter(
+					({ id }) => id === status_id,
+				);
+			}
+		},
+
 		updateStatus: (store, action: PayloadAction<Status & { space_id: number }>) => {
 			if (store.project?.spaces) {
 				const { space_id, ...status } = action.payload;

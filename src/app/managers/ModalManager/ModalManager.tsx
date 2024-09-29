@@ -6,6 +6,8 @@ const initialState: ModalManagerSchema = {
 	currentModal: null,
 	modals: {
 		CREATE_PROJECT: { isOpen: false },
+		EDIT_TASK: { isOpen: false },
+		CREATE_STATUS: { isOpen: false },
 	},
 };
 

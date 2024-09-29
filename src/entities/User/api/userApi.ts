@@ -10,6 +10,10 @@ const userApi = rtkApi.injectEndpoints({
 			query: () => "/profile",
 		}),
 
+		uploadAvatar: build.mutation<User, FormData>({
+			query: (formdata) => ({ url: "/profile/upload", body: formdata, method: "POST" }),
+		}),
+
 		getUser: build.query<User, string>({
 			query: (user_id) => "/profile/" + user_id,
 		}),
@@ -55,6 +59,7 @@ export const {
 	useRegisterMutation,
 	useGetProjectUsersQuery,
 	useSignInMutation,
+	useUploadAvatarMutation,
 	useSignOutMutation,
 	useGetMeQuery,
 	useGetUserQuery,

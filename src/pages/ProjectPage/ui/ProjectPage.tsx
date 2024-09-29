@@ -24,7 +24,7 @@ const ProjectPage = () => {
 			return res;
 		}
 		return [];
-	}, [project]);
+	}, [project, space_id]);
 
 	useEffect(() => {
 		if (projectData) {
