@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Box, IconButton, Toolbar, Tooltip } from "@mui/material";
+import { Box, IconButton, Tooltip } from "@mui/material";
 import { Save, Undo, Redo, Clear } from "@mui/icons-material";
 import CanvasDraw from "react-canvas-draw";
 
@@ -27,8 +27,8 @@ export const DrawingBoard: React.FC = () => {
 	};
 
 	return (
-		<Box>
-			<Toolbar sx={{ display: "flex", gap: 2, marginBottom: 2 }}>
+		<Box component={"div"} className="grid grid-cols-2 justify-center items-center overflow-auto">
+			<div className="flex flex-col justify-center items-center">
 				<Tooltip title="Undo">
 					<IconButton onClick={undoCanvas}>
 						<Undo />
@@ -49,7 +49,7 @@ export const DrawingBoard: React.FC = () => {
 						<Save />
 					</IconButton>
 				</Tooltip>
-			</Toolbar>
+			</div>
 
 			<Box sx={{ border: "1px solid #ccc", width: "600px", height: "400px" }}>
 				<CanvasDraw ref={canvasRef} canvasWidth={600} canvasHeight={400} brushColor="#000" brushRadius={4} />

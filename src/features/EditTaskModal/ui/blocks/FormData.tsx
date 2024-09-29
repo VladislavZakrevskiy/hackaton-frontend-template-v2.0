@@ -36,19 +36,10 @@ export const Form = () => {
 		setValue("createDate", state?.task?.title || "");
 		setValue("deadlineDate", state?.task?.title || "");
 		setValue("description", state?.task?.title || "");
-		setValue("executor_id", state?.task?.executor.id || 0);
-		setValue("image", state?.task?.image[0] || "");
 		setValue("title", state?.task?.title || "");
 	}, [state]);
 
-	const onSubmit: SubmitHandler<EditTaskFormData> = async ({
-		createDate,
-		deadlineDate,
-		description,
-		executor_id,
-		image,
-		title,
-	}) => {
+	const onSubmit: SubmitHandler<EditTaskFormData> = async ({ createDate, deadlineDate, description, title }) => {
 		if (store) {
 			const task = await editTask({
 				...store?.task,
@@ -56,7 +47,6 @@ export const Form = () => {
 				description,
 				deadlineDate,
 				createDate,
-				executor: { id: executor_id, email: "", fullName: "", image, username: "" },
 			}).unwrap();
 			updateTask({ ...task, space_id: task.spaceId, status_id: task.statusId });
 		}
